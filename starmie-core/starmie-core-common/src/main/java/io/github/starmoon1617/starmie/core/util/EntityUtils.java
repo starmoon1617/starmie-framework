@@ -4,60 +4,69 @@
  */
 package io.github.starmoon1617.starmie.core.util;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import io.github.starmoon1617.starmie.core.constant.TimeConstants;
 import io.github.starmoon1617.starmie.core.exception.EntityOperationException;
+import io.github.starmoon1617.starmie.core.json.DateJsonDeserializer;
 
 /**
- * 实体工具类
+ * 实体工具类 
  * Utility Class for Entity
  * 
  * @date 2023-10-09
  * @author Nathan Liao
  */
 public class EntityUtils {
-    
+
     private static final String EXCLUDE_ID = "id";
-    
+
     private static final ObjectMapper NOM = new ObjectMapper();
 
     private static final ObjectMapper NOTNOM = new ObjectMapper();
-    
+
     private static Boolean omInited = Boolean.FALSE;
-    
+
     static {
-        initOM();
+        initOm();
     }
-    
-    private static synchronized void initOM() {
+
+    private static synchronized void initOm() {
         if (!omInited.booleanValue()) {
-            
+
             NOM.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             NOM.setDateFormat(new SimpleDateFormat(TimeConstants.DATE_TIME_FORMAT));
+            NOM.registerModule((new SimpleModule()).addDeserializer(Date.class, new DateJsonDeserializer()));
 
             NOTNOM.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             NOTNOM.setDateFormat(new SimpleDateFormat(TimeConstants.DATE_TIME_FORMAT));
             NOTNOM.setDefaultPropertyInclusion(Include.NON_NULL);
-
+            NOTNOM.registerModule((new SimpleModule()).addDeserializer(Date.class, new DateJsonDeserializer()));
             omInited = Boolean.TRUE;
         }
 
     }
-    
+
     private EntityUtils() {
-        
+
     }
-    
+
     /**
      * copy props from target to source, exclude ID
      * 
@@ -67,9 +76,9 @@ public class EntityUtils {
     public static void copyProperties(Object target, Object source) {
         BeanUtils.copyProperties(source, target, EXCLUDE_ID);
     }
-    
+
     /**
-     * 通过反射获取属性值,没有该属性着返回NULL
+     * 通过反射获取属性值,没有该属性着返回NULL 
      * get Field value using Reflection
      * 
      * @param target
@@ -93,8 +102,9 @@ public class EntityUtils {
     }
 
     /**
-     * 通过反射设置属性值,没有该属性则忽略
+     * 通过反射设置属性值,没有该属性则忽略 
      * set Field value using Reflection
+     * 
      * @param target
      * @param fieldName
      * @param value
@@ -114,7 +124,7 @@ public class EntityUtils {
             throw new EntityOperationException("Set field value Exception!", e);
         }
     }
-    
+
     /**
      * Object to JSON String
      * 
@@ -128,7 +138,7 @@ public class EntityUtils {
             throw new EntityOperationException("Object to Json Exception!", e);
         }
     }
-    
+
     /**
      * Object to JSON String, Exclude Null fields
      * 
@@ -142,5 +152,75 @@ public class EntityUtils {
             throw new EntityOperationException("Object to Json Exception!", e);
         }
     }
+
+    /**
+     * 从JSON字符串转成对象
+     * JSON String to Object 
+     * 
+     * @param <T>
+     * @param str
+     * @param type
+     * @return
+     */
+    public static <T> T fromJson(String str, Class<T> type) {
+        try {
+            return NOM.readValue(str, type);
+        } catch (JsonProcessingException e) {
+            throw new EntityOperationException("Josn to Object Exception!", e);
+        }
+
+    }
+
+    /**
+     * 从JSON字符串转成对象
+     * JSON String to Object 
+     * 
+     * @param <T>
+     * @param str
+     * @param type
+     * @return
+     */
+    public static <T> T fromJson(String str, JavaType type) {
+        try {
+            return NOM.readValue(str, type);
+        } catch (JsonProcessingException e) {
+            throw new EntityOperationException("Josn to Object Exception!", e);
+        }
+    }
+
+    /**
+     * 从JSON字符串转成对象
+     * JSON String to Object 
+     * 
+     * @param <T>
+     * @param str
+     * @param type
+     * @return
+     * @throws IOException
+     */
+    public static <T> T fromJson(String str, TypeReference<T> type) throws IOException {
+        try {
+            return NOM.readValue(str, type);
+        } catch (JsonProcessingException e) {
+            throw new EntityOperationException("Josn to Object Exception!", e);
+        }
+    }
     
+    /**
+     * 将JSON转成List对象
+     * JSON String to Object List
+     * 
+     * @param <T>
+     * @param str
+     * @param type
+     * @return
+     */
+    public static <T> List<T> fromJsonToList(String str, Class<T> type) {
+        try {
+            return NOM.readValue(str, NOM.getTypeFactory().constructParametricType(ArrayList.class, type));
+        } catch (JsonProcessingException e) {
+            throw new EntityOperationException("Josn to Object Exception!", e);
+        }
+    }
+
 }

@@ -7,5 +7,17 @@
     </parent>
     <artifactId>starmie-utils-poi</artifactId>
     <description>starmie poi utils</description>
+    
+    <dependencies>
+        <dependency>
+            <groupId>io.github.starmoon1617</groupId>
+            <artifactId>starmie-utils-doc</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

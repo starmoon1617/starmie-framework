@@ -19,7 +19,7 @@ public class TimeConstants {
     /**
      * yyyy-MM-dd HH:mm:ss.SSS
      */
-    public static final String MILLISECOND_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static final String DATE_TIME_MS_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     
     /**
      * yyyy-MM-dd HH:mm:ss

@@ -8,4 +8,12 @@
     <artifactId>starmie-utils-doc</artifactId>
     <description>starmie doc utils</description>
     
+    <dependencies>
+        <dependency>
+            <groupId>io.github.starmoon1617</groupId>
+            <artifactId>starmie-core-common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+    
 </project>
