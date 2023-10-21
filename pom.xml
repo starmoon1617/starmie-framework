@@ -9,8 +9,8 @@
     <description>starmie framework</description>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <versions.plugin.ver>2.16.1</versions.plugin.ver>
-        <proj.encoding>UTF-8</proj.encoding>
         <java.ver>17</java.ver>
         <compiler.plugin.ver>3.11.0</compiler.plugin.ver>
         <surefire.plugin.ver>3.1.2</surefire.plugin.ver>
@@ -24,12 +24,13 @@
         <mybatis.generator.ver>1.4.2</mybatis.generator.ver>
         <poi.ver>5.2.3</poi.ver>
         <pdfbox.ver>2.0.27</pdfbox.ver>
+        <freemarker.ver>2.3.32</freemarker.ver>
     </properties>
 
     <modules>
         <module>starmie-core</module>
         <module>starmie-utils</module>
-        <!--<module>starmie-generator</module> -->
+        <module>starmie-generator</module>
     </modules>
 
     <dependencyManagement>
@@ -86,6 +87,11 @@
                 <artifactId>pdfbox</artifactId>
                 <version>${pdfbox.ver}</version>
             </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.ver}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -122,7 +128,7 @@
                 <configuration>
                     <source>${java.ver}</source>
                     <target>${java.ver}</target>
-                    <encoding>${proj.encoding}</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <!-- versions-maven-plugin, mvn versions:set -DnewVersion=<new version> -DgenerateBackupPoms=false -->

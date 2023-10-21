@@ -6,6 +6,7 @@ package io.github.starmoon1617.starmie.core.util;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -221,6 +222,16 @@ public class EntityUtils {
         } catch (JsonProcessingException e) {
             throw new EntityOperationException("Josn to Object Exception!", e);
         }
+    }
+    
+    /**
+     * From Type to JavaType
+     * 
+     * @param type
+     * @return
+     */
+    public static JavaType toJavaType(Type type) {
+        return NOM.constructType(type);
     }
 
 }

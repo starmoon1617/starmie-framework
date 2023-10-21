@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.starmoon1617</groupId>
+        <artifactId>starmie</artifactId>
+        <version>0.0.1</version>
+    </parent>
+    <artifactId>starmie-generator</artifactId>
+    <packaging>pom</packaging>
+    <description>starmie generator</description>
+
+    <modules>
+        <module>starmie-generator-core</module>
+		<module>starmie-generator-freemarker</module>
+        <module>starmie-generator-thymeleaf</module>
+    </modules>
+
+</project>

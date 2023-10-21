@@ -12,8 +12,7 @@ import org.springframework.util.StringUtils;
 import io.github.starmoon1617.starmie.core.constant.InterpunctionConstants;
 
 /**
- * String, Collection, Map等工具类 
- * Utility Class for String, Collection, Map etc...
+ * String, Collection, Map等工具类 Utility Class for String, Collection, Map etc...
  * 
  * @date 2023-10-08
  * @author Nathan Liao
@@ -63,9 +62,9 @@ public class CommonUtils {
     public static final boolean isEmpty(Object[] array) {
         return (array == null || array.length == 0);
     }
-    
+
     /**
-     * 修改第一个字母为大写,不修改其他字母
+     * change first char to upper case
      * 
      * @param str
      * @return
@@ -75,7 +74,7 @@ public class CommonUtils {
     }
 
     /**
-     * 修改第一个字母为小写,不修改其他字母
+     * change first char to lower case
      * 
      * @param str
      * @return
@@ -94,7 +93,7 @@ public class CommonUtils {
     public static final String[] split(String str, String delimiter) {
         return StringUtils.delimitedListToStringArray(str, delimiter);
     }
-    
+
     /**
      * Camel to underscore
      * 
@@ -103,7 +102,7 @@ public class CommonUtils {
      */
     public static final String toUnderScore(String str) {
         if (str == null) {
-            return str; // garbage in, garbage out
+            return str;
         }
         int length = str.length();
         StringBuilder result = new StringBuilder(length * 2);
@@ -111,11 +110,9 @@ public class CommonUtils {
         boolean wasPrevTranslated = false;
         for (int i = 0; i < length; i++) {
             char c = str.charAt(i);
-            if (i > 0 || c != InterpunctionConstants.UNDER_LINE) // skip first starting underscore
-            {
+            if (i > 0 || c != InterpunctionConstants.UNDER_LINE) {
                 if (Character.isUpperCase(c)) {
-                    if (!wasPrevTranslated && resultLength > 0
-                            && result.charAt(resultLength - 1) != InterpunctionConstants.UNDER_LINE) {
+                    if (!wasPrevTranslated && resultLength > 0 && result.charAt(resultLength - 1) != InterpunctionConstants.UNDER_LINE) {
                         result.append(InterpunctionConstants.UNDER_LINE);
                         resultLength++;
                     }

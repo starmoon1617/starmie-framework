@@ -14,6 +14,36 @@ public class InterpunctionConstants {
     
     private InterpunctionConstants() {
     }
+    
+    /**
+     * 星号 *
+     */
+    public static final char ASTERISK = '*';
+    
+    /**
+     * 星号 *
+     */
+    public static final String ASTERISK_STR = "*";
+    
+    /**
+     * 等于 = 
+     */
+    public static final char EQUALS_SIGN = '=';
+    
+    /**
+     * 等于 = 
+     */
+    public static final String EQUALS_SIGN_STR = "=";
+    
+    /**
+     * 横杠 - 
+     */
+    public static final char HYPHEN = '-';
+    
+    /**
+     * 横杠 - 
+     */
+    public static final String HYPHEN_STR = "-";
 
     /**
      * 单引号'
