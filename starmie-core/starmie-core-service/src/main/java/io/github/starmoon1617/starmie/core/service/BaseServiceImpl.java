@@ -9,7 +9,7 @@ import java.util.List;
 
 import io.github.starmoon1617.starmie.core.base.BaseEntity;
 import io.github.starmoon1617.starmie.core.criterion.BaseCriteria;
-import io.github.starmoon1617.starmie.core.dao.BaseDao;
+import io.github.starmoon1617.starmie.core.dao.BaseMapper;
 
 /**
  * base implementation for service interface
@@ -24,7 +24,7 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID, U>, ID extends Se
      * 
      * @return
      */
-    protected abstract BaseDao<E, ID, U> getDao();
+    protected abstract BaseMapper<E, ID, U> getDao();
 
     @Override
     public E find(E e) {

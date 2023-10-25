@@ -3,26 +3,27 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.starmoon1617</groupId>
-        <artifactId>starmie-core</artifactId>
+        <artifactId>starmie-app</artifactId>
         <version>0.0.1</version>
     </parent>
-    <artifactId>starmie-core-service</artifactId>
-    <description>starmie core service</description>
+    <artifactId>starmie-app-web</artifactId>
+    <description>starmie app web</description>
 
     <dependencies>
         <dependency>
             <groupId>io.github.starmoon1617</groupId>
-            <artifactId>starmie-core-base</artifactId>
+            <artifactId>starmie-app-base</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.starmoon1617</groupId>
-            <artifactId>starmie-core-common</artifactId>
+            <artifactId>starmie-utils-poi</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

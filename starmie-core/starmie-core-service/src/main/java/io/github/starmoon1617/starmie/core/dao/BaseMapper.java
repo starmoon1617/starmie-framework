@@ -16,7 +16,7 @@ import io.github.starmoon1617.starmie.core.criterion.BaseCriteria;
  * @date 2023-10-09
  * @author Nathan Liao
  */
-public interface BaseDao<E extends BaseEntity<ID, U>, ID extends Serializable, U extends Serializable> {
+public interface BaseMapper<E extends BaseEntity<ID, U>, ID extends Serializable, U extends Serializable> {
     
     /**
      * 查找

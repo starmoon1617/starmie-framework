@@ -4,7 +4,6 @@
  */
 package io.github.starmoon1617.starmie.generator.core.util;
 
-import java.nio.charset.Charset;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
@@ -221,6 +220,8 @@ public class ConfigurationUtils {
         context.setSqlMapGeneratorConfiguration(createSqlMapGeneratorConfiguration(properties));
         context.setJavaClientGeneratorConfiguration(
                 createJavaClientGeneratorConfiguration(properties, CorePropertyRegistry.GENERATE_MAP_CLIENT + Constants.DOT));
+        context.getJavaClientGeneratorConfiguration().setConfigurationType(
+                properties.getProperty(CorePropertyRegistry.GENERATE_MAP_CLIENT + Constants.DOT + ConfigurationPropertyRegistry.TYPE, "XMLMAPPER"));
 
         context.setServiceGeneratorConfiguration(createJavaClientGeneratorConfiguration(properties, CorePropertyRegistry.GENERATE_SERVICE + Constants.DOT));
         context.setManagerGeneratorConfiguration(createJavaClientGeneratorConfiguration(properties, CorePropertyRegistry.GENERATE_MANAGER + Constants.DOT));

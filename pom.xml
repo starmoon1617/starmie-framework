@@ -30,6 +30,8 @@
     <modules>
         <module>starmie-core</module>
         <module>starmie-utils</module>
+        <module>starmie-app</module>
+        <module>starmie-boot</module>
         <module>starmie-generator</module>
     </modules>
 

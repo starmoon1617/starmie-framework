@@ -5,6 +5,7 @@
 package io.github.starmoon1617.starmie.core.manager;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import io.github.starmoon1617.starmie.core.base.BaseEntity;
@@ -32,6 +33,13 @@ public interface BaseManager<E extends BaseEntity<ID, U>, ID extends Serializabl
      * @param e
      */
     int save(E e);
+
+    /**
+     * 保存多个数据
+     * 
+     * @param es
+     */
+    int save(Collection<E> es);
 
     /**
      * 删除单个数据

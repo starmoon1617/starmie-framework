@@ -5,7 +5,11 @@
 package io.github.starmoon1617.starmie.core.manager;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.starmoon1617.starmie.core.base.BaseEntity;
 import io.github.starmoon1617.starmie.core.constant.CriterionConstants;
@@ -36,16 +40,31 @@ public abstract class BaseManagerImpl<E extends BaseEntity<ID, U>, ID extends Se
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public int save(E e) {
         return getService().save(e);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public int save(Collection<E> es) {
+        if (CommonUtils.isEmpty(es)) {
+            return 0;
+        }
+        for (E e : es) {
+            getService().save(e);
+        }
+        return es.size();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public int delete(E e) {
         return getService().delete(e);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public int update(E e) {
         return getService().update(e);
     }

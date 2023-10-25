@@ -4,8 +4,11 @@
  */
 package io.github.starmoon1617.starmie.core.util;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
@@ -92,6 +95,28 @@ public class CommonUtils {
      */
     public static final String[] split(String str, String delimiter) {
         return StringUtils.delimitedListToStringArray(str, delimiter);
+    }
+
+    /**
+     * 分隔
+     * 
+     * @param str
+     * @param delimiter
+     * @return
+     */
+    public static final List<String> splitToList(String str, String delimiter) {
+        return Arrays.asList(StringUtils.delimitedListToStringArray(str, delimiter));
+    }
+
+    /**
+     * 分隔
+     * 
+     * @param str
+     * @param delimiter
+     * @return
+     */
+    public static final Set<String> splitToSet(String str, String delimiter) {
+        return StringUtils.commaDelimitedListToSet(str);
     }
 
     /**

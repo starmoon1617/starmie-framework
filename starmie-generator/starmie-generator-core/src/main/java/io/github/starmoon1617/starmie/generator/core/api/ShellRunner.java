@@ -7,24 +7,26 @@ package io.github.starmoon1617.starmie.generator.core.api;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.api.VerboseProgressCallback;
 import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.exception.InvalidConfigurationException;
-import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.logging.LogFactory;
+
+import io.github.starmoon1617.starmie.generator.core.util.ConfigurationUtils;
 
 /**
  * to run code generator
@@ -73,12 +75,13 @@ public class ShellRunner {
         }
 
         Set<String> fullyQualifiedTables = StringUtility.tokenize(arguments.get(TABLES));
-        
+
         Set<String> contexts = StringUtility.tokenize(arguments.get(CONTEXT_IDS));
 
         try {
-            ConfigurationParser cp = new ConfigurationParser(warnings);
-            Configuration config = cp.parseConfiguration(configurationFile);
+            Properties properties = new Properties();
+            properties.load(new FileReader(configurationFile));
+            Configuration config = ConfigurationUtils.createConfiguration(properties);
 
             DefaultShellCallback shellCallback = new DefaultShellCallback(arguments.containsKey(OVERWRITE));
 
@@ -88,14 +91,6 @@ public class ShellRunner {
 
             myBatisGenerator.generate(progressCallback, contexts, fullyQualifiedTables);
 
-        } catch (XMLParserException e) {
-            writeLine(getString("Progress.3")); //$NON-NLS-1$
-            writeLine();
-            for (String error : e.getErrors()) {
-                writeLine(error);
-            }
-
-            return;
         } catch (SQLException | IOException e) {
             e.printStackTrace(System.out);
             return;

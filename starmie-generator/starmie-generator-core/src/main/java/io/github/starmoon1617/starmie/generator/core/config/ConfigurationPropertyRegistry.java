@@ -65,5 +65,10 @@ public class ConfigurationPropertyRegistry {
      * javaTypeResolver
      */
     public static final String TYPE_RESOLVER = "javaTypeResolver";
+    
+    /**
+     * type 
+     */
+    public static final String TYPE = "type";
 
 }
