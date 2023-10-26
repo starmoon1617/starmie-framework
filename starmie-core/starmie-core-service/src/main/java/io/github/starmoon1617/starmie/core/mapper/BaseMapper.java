@@ -2,7 +2,7 @@
  * Copyright (c) 2023, Starmoon1617 and/or Nathan Liao. All rights reserved.
  *
  */
-package io.github.starmoon1617.starmie.core.dao;
+package io.github.starmoon1617.starmie.core.mapper;
 
 import java.io.Serializable;
 import java.util.List;

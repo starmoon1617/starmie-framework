@@ -14,14 +14,14 @@ import io.github.starmoon1617.starmie.generator.core.api.TemplateGenerator;
 import io.github.starmoon1617.starmie.generator.freemarker.util.TemplateUtils;
 
 /**
- * FreeMarker Template Generater
+ * FreeMarker Template Generator
  * 
  * @date 2023-10-13
  * @author Nathan Liao
  */
-public class FreeMarkerGenerater extends TemplateGenerator {
+public class FreeMarkerGenerator extends TemplateGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FreeMarkerGenerater.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FreeMarkerGenerator.class);
 
     @Override
     public String process(String template, Map<String, Object> datas) {

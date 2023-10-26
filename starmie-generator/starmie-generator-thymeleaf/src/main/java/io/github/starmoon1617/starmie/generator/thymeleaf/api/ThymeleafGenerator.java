@@ -15,14 +15,14 @@ import io.github.starmoon1617.starmie.generator.core.api.TemplateGenerator;
 import io.github.starmoon1617.starmie.generator.thymeleaf.util.TemplateEngineUtils;
 
 /**
- * Thymeleaf Template Generater
+ * Thymeleaf Template Generator
  * 
  * @date 2023-10-13
  * @author Nathan Liao
  */
-public class ThymeleafGenerater extends TemplateGenerator {
+public class ThymeleafGenerator extends TemplateGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThymeleafGenerater.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThymeleafGenerator.class);
 
     @Override
     public String process(String template, Map<String, Object> datas) {

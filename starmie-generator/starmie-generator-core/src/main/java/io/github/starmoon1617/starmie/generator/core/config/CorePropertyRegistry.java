@@ -22,12 +22,12 @@ public class CorePropertyRegistry {
     public static final String ANY_GENERIC_ROOT_CLASS = "genericRootClass";
 
     /**
-     * class name for java model/DAO/manager/service/controller
+     * class name for java model/mapper/manager/service/controller
      */
     public static final String ANY_CLASS = "class";
 
     /**
-     * Package for java model/DAO/manager/service/controller
+     * Package for java model/mapper/manager/service/controller
      */
 
     public static final String ANY_TARGET_PACKAGE = "targetPackage";
@@ -55,11 +55,6 @@ public class CorePropertyRegistry {
      * file EXT for files generated
      */
     public static final String ANY_FILE_EXT = "fileExt";
-
-    /**
-     * if use Dao as client class
-     */
-    public static final String DAO_OVER_MAPPER = "daoOverMapper";
 
     /**
      * if use rest controller instead
@@ -114,7 +109,7 @@ public class CorePropertyRegistry {
     /**
      * Impl class for generator
      */
-    public static final String TEMPLATE_GENERATER_IMPL = "templateGeneraterImpl";
+    public static final String TEMPLATE_GENERATOR_IMPL = "templateGeneratorImpl";
 
     /**
      * force TinyInt to Integer
@@ -132,11 +127,11 @@ public class CorePropertyRegistry {
     /**
      * Mapper
      */
-    public static final String MAPPER = "Mapper";
+    public static final String XML_MAPPER = "XmlMapper";
     /**
      * Mapper
      */
-    public static final String DAO = "Dao";
+    public static final String MAPPER = "Mapper";
     /**
      * Service
      */

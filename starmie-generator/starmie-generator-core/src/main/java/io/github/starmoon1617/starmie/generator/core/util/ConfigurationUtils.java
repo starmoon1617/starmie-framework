@@ -67,6 +67,7 @@ public class ConfigurationUtils {
         connectionConfiguration.setConnectionURL(dbUri);
         connectionConfiguration.setUserId(user);
         connectionConfiguration.setPassword(password);
+        connectionConfiguration.addProperty("nullCatalogMeansCurrent", "true");
         return connectionConfiguration;
     }
 
@@ -173,7 +174,7 @@ public class ConfigurationUtils {
         for (Entry<Object, Object> prop : propSet) {
             String key = prop.getKey().toString();
             if (key.startsWith(prefix)) {
-                propertyHolder.addProperty(key, prop.getValue().toString());
+                propertyHolder.addProperty(key.substring(prefix.length()), prop.getValue().toString());
             }
         }
     }
@@ -212,6 +213,7 @@ public class ConfigurationUtils {
         context.setTargetRuntime(properties.getProperty(ConfigurationPropertyRegistry.CONTEXT_RUNTIME, StarmieIntrospectedTableImpl.class.getName()));
         context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING,
                 properties.getProperty(ConfigurationPropertyRegistry.CONTEXT_FILE_ENCODING, Constants.UTF_8));
+        context.addProperty(CorePropertyRegistry.TEMPLATE_GENERATOR_IMPL, properties.getProperty(ConfigurationPropertyRegistry.CONTEXT_TEMPLATE_GENERATOR, ""));
 
         context.setJdbcConnectionConfiguration(createJDBCConnectionConfiguration(properties));
         context.setJavaTypeResolverConfiguration(createJavaTypeResolverConfiguration(properties));

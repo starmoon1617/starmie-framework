@@ -74,7 +74,7 @@ public class StringUtils {
         if (str.length() == 1) {
             return str.toUpperCase();
         }
-        return (new StringBuilder(Character.toLowerCase(str.charAt(0)))).append(str.substring(1)).toString();
+        return (new StringBuilder("")).append(Character.toLowerCase(str.charAt(0))).append(str.substring(1)).toString();
     }
 
 }

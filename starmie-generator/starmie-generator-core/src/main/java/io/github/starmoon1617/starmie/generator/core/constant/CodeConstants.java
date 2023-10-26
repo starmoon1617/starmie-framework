@@ -84,7 +84,7 @@ public class CodeConstants {
     /**
      * comment for file, using to write copyright;
      */
-    public static String FILE_COMENT = "fileComent";
+    public static String FILE_COMMENT = "fileComment";
     
     /**
      * name for package

@@ -69,7 +69,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     /**
      * class for
      */
-    private Class<? extends TemplateGenerator> templateGeneraterClass;
+    private Class<? extends TemplateGenerator> templateGeneratorClass;
 
     /**
      * Service/Manager/Controller Generator
@@ -131,9 +131,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     protected void calculateXmlAttributes() {
         super.calculateXmlAttributes();
         SqlMapGeneratorConfiguration config = context.getSqlMapGeneratorConfiguration();
-        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_PATH, CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
-        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_FILES, CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
-        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_EXT, CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
+        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_PATH, CorePropertyRegistry.XML_MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
+        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_FILES,
+                CorePropertyRegistry.XML_MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
+        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_EXT, CorePropertyRegistry.XML_MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
     }
 
     @Override
@@ -199,7 +200,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             sb.append(tableConfiguration.getMapperName());
         } else {
             sb.append(modelType);
-            sb.append(CorePropertyRegistry.DAO); // $NON-NLS-1$
+            sb.append(CorePropertyRegistry.MAPPER); // $NON-NLS-1$
         }
         setMyBatis3JavaMapperType(sb.toString());
 
@@ -214,11 +215,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         }
         setMyBatis3SqlProviderType(sb.toString());
 
-        setAttribute(config, PropertyRegistry.ANY_ROOT_CLASS, CorePropertyRegistry.DAO + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
+        setAttribute(config, PropertyRegistry.ANY_ROOT_INTERFACE, CorePropertyRegistry.MAPPER + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
 
-        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_PATH, CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
-        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_FILES, CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
-        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_EXT, CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
+        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_PATH, CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
+        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_FILES, CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
+        setAttribute(config, CorePropertyRegistry.ANY_TEMPLATE_EXT, CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
     }
 
     /**
@@ -537,7 +538,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         ImportUtils.addImportType(imports, type.getFullyQualifiedNameWithoutTypeParameters());
 
         // comment
-        data.setComment(CommentsUtils.getFieldComment(this, column));
+        data.setComments(CommentsUtils.getFieldComment(this, column));
     }
 
     /**
@@ -558,8 +559,8 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         MethodData getterData = new MethodData();
         methods.add(getterData);
-        MethodData setterdata = new MethodData();
-        methods.add(setterdata);
+        MethodData setterData = new MethodData();
+        methods.add(setterData);
 
         // name
         StringBuilder sb = new StringBuilder("get");
@@ -567,17 +568,17 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         getterData.setName(sb.toString());
         sb.setLength(0);
         sb.append("set").append(firstChar).append(tempName);
-        setterdata.setName(sb.toString());
+        setterData.setName(sb.toString());
 
         // modifiers
         List<String> modifiers = new ArrayList<>();
         modifiers.add(Modifier.toString(Modifier.PUBLIC));
         getterData.setModifiers(modifiers);
-        setterdata.setModifiers(modifiers);
+        setterData.setModifiers(modifiers);
 
         // comment
-        getterData.setComment(CommentsUtils.getGetterComment(this, column));
-        setterdata.setComment(CommentsUtils.getSetterComment(this, column));
+        getterData.setComments(CommentsUtils.getGetterComment(this, column));
+        setterData.setComments(CommentsUtils.getSetterComment(this, column));
 
         FullyQualifiedJavaType type = column.getFullyQualifiedJavaType();
         // imports
@@ -587,19 +588,24 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         getterData.setReturnType(type.getShortName());
 
         // return type for setter
-        getterData.setReturnType("void");
+        setterData.setReturnType("void");
         // parameter for setter
         List<String> parameters = new ArrayList<>();
         parameters.add(type.getShortName() + " " + column.getJavaProperty());
-        setterdata.setParameters(parameters);
+        setterData.setParameters(parameters);
 
         // implementation for method
         sb.setLength(0);
         sb.append("return ").append(column.getJavaProperty()).append(Constants.SEMICOLON);
-        getterData.setImplementation(sb.toString());
+        List<String> getterImpl = new ArrayList<>();
+        getterImpl.add(sb.toString());
+        getterData.setImplementations(getterImpl);
+
         sb.setLength(0);
         sb.append("this. ").append(column.getJavaProperty()).append(" = ").append(column.getJavaProperty()).append(Constants.SEMICOLON);
-        setterdata.setImplementation(sb.toString());
+        List<String> setterImpl = new ArrayList<>();
+        setterImpl.add(sb.toString());
+        setterData.setImplementations(setterImpl);
     }
 
     /**
@@ -617,7 +623,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         }
 
         Map<String, Object> datas = new HashMap<>();
-        datas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
+        datas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
         datas.put(CodeConstants.COMMENT, CommentsUtils.getModelComment(this));
 
         Set<String> imports = new TreeSet<>();
@@ -639,7 +645,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             if (baseClass != null) {
                 imports.add(baseClass.getName());
                 // check serializableImpl
-                checkSerializable(baseClass);
+                serializableImpl = checkSerializable(baseClass);
                 processBaseModelClass(baseClass, includedFields, genericFields);
             }
         }
@@ -700,7 +706,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         datas.put(CodeConstants.NAME, className);
 
         if (baseClass != null) {
-            datas.put(CodeConstants.SUPER_CLASS, classToSuperClass(baseClass, baseClass.getName(), className, imports));
+            datas.put(CodeConstants.SUPER_CLASS, classToSuperClass(baseClass, baseClass.getName(), new FullyQualifiedJavaType(getBaseRecordType()), imports));
         }
 
         answer.add(generatedJavaFiles(datas, path, templateFiles, ext, className + ".java", targetPackage,
@@ -709,44 +715,43 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     }
 
     /**
-     * 获取生成的Dao代码
+     * 获取生成的Mapper代码
      * 
      * @return
      */
-    protected List<GeneratedJavaFile> getGeneratedDaoFiles() {
+    protected List<GeneratedJavaFile> getGeneratedMapperClientFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-        String path = (String) getAttribute(CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
-        String templateFiles = (String) getAttribute(CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
-        String ext = (String) getAttribute(CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
+        String path = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
+        String templateFiles = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
+        String ext = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
         if (!(StringUtility.stringHasValue(path) && StringUtility.stringHasValue(templateFiles) && StringUtility.stringHasValue(ext))) {
             return answer;
         }
 
-        boolean isDaoOverMapper = StringUtility.isTrue(context.getProperty(CorePropertyRegistry.DAO_OVER_MAPPER));
         String modelBaseClass = (String) getAttribute(CorePropertyRegistry.MODEL + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
         String modelClass = fullyQualifiedTable.getDomainObjectName();
 
         Map<String, Object> datas = new HashMap<>();
-        datas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
-        datas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment((isDaoOverMapper ? "DAO for " : "Mapper for") + modelClass));
+        datas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
+        datas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Mapper for" + modelClass));
 
         Set<String> imports = new TreeSet<>();
         datas.put(CodeConstants.IMPORTS, imports);
 
-        String baseInterface = (String) getAttribute(CorePropertyRegistry.DAO + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
+        String baseInterface = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
         if (StringUtility.stringHasValue(baseInterface)) {
             ImportUtils.addImportType(imports, baseInterface);
-            String mapperSuperClass = classToSuperClass(TypeUtils.loadClass(baseInterface), modelBaseClass, modelClass, imports);
+            String mapperSuperClass = classToSuperClass(TypeUtils.loadClass(baseInterface), modelBaseClass, new FullyQualifiedJavaType(getBaseRecordType()), imports);
             datas.put(CodeConstants.SUPER_CLASS, mapperSuperClass);
-            setAttribute(CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS, mapperSuperClass);
+            setAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS, mapperSuperClass);
         }
 
-        FullyQualifiedJavaType daoType = new FullyQualifiedJavaType(getMyBatis3JavaMapperType());
-        datas.put(CodeConstants.PACKAGE_NAME, daoType.getPackageName());
+        FullyQualifiedJavaType mapperType = new FullyQualifiedJavaType(getMyBatis3JavaMapperType());
+        datas.put(CodeConstants.PACKAGE_NAME, mapperType.getPackageName());
         datas.put(CodeConstants.CLASS_TYPE, CodeConstants.TYPE_INTERFACE);
-        datas.put(CodeConstants.NAME, daoType.getShortNameWithoutTypeArguments());
+        datas.put(CodeConstants.NAME, mapperType.getShortNameWithoutTypeArguments());
 
-        answer.add(generatedJavaFiles(datas, path, templateFiles, ext, daoType.getShortNameWithoutTypeArguments() + ".java", daoType.getPackageName(),
+        answer.add(generatedJavaFiles(datas, path, templateFiles, ext, mapperType.getShortNameWithoutTypeArguments() + ".java", mapperType.getPackageName(),
                 context.getJavaClientGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
 
         return answer;
@@ -771,7 +776,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         StringBuilder sb = new StringBuilder();
         Map<String, Object> interfaceDatas = new HashMap<>();
-        interfaceDatas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
+        interfaceDatas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
         interfaceDatas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Service Interface for " + modelClass));
 
         Set<String> interfaceImports = new TreeSet<>();
@@ -779,7 +784,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         String baseInterface = (String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
         if (StringUtility.stringHasValue(baseInterface)) {
             ImportUtils.addImportType(interfaceImports, baseInterface);
-            String serviceSuperClass = classToSuperClass(TypeUtils.loadClass(baseInterface), modelBaseClass, modelClass, interfaceImports);
+            String serviceSuperClass = classToSuperClass(TypeUtils.loadClass(baseInterface), modelBaseClass, new FullyQualifiedJavaType(getBaseRecordType()), interfaceImports);
             interfaceDatas.put(CodeConstants.SUPER_CLASS, serviceSuperClass);
             setAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS, serviceSuperClass);
         }
@@ -799,7 +804,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         if (StringUtility.stringHasValue(baseClass)) {
             FullyQualifiedJavaType baseClassType = new FullyQualifiedJavaType(baseClass);
             ImportUtils.addImportType(classImports, baseClassType.getFullyQualifiedNameWithoutTypeParameters());
-            classDatas.put(CodeConstants.SUPER_CLASS, classToSuperClass(TypeUtils.loadClass(baseClass), modelBaseClass, modelClass, classImports));
+            classDatas.put(CodeConstants.SUPER_CLASS, classToSuperClass(TypeUtils.loadClass(baseClass), modelBaseClass, new FullyQualifiedJavaType(getBaseRecordType()), classImports));
         }
 
         FullyQualifiedJavaType mapperType = new FullyQualifiedJavaType(getMyBatis3JavaMapperType());
@@ -832,12 +837,14 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             List<MethodData> methods = new ArrayList<>();
             List<Method> methodList = TypeUtils.getAbstractMethods(TypeUtils.loadClass(baseClass));
             if (methodList != null && !methodList.isEmpty()) {
-                String baseMapperInterface = (String) getAttribute(CorePropertyRegistry.DAO + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
+                String baseMapperInterface = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
                 for (Method method : methodList) {
-                    // check if return baseDao
+                    // check if return base mapper
                     if (!method.getReturnType().getTypeName().equals(baseMapperInterface)) {
                         continue;
                     }
+                    ImportUtils.addImportType(classImports, baseMapperInterface);
+                    
                     List<String> modifiers = new ArrayList<String>();
                     if (Modifier.isProtected(method.getModifiers())) {
                         modifiers.add(Modifier.toString(Modifier.PROTECTED));
@@ -852,10 +859,13 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
                     md.setName(method.getName());
                     md.setModifiers(modifiers);
                     md.setAnnotations(annotations);
-                    md.setReturnType((String) getAttribute(CorePropertyRegistry.DAO + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS));
+                    md.setReturnType((String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS));
                     sb.setLength(0);
                     sb.append("return ").append(mapperField.getName()).append(Constants.SEMICOLON);
-                    md.setImplementation(sb.toString());
+
+                    List<String> methodImpl = new ArrayList<>();
+                    methodImpl.add(sb.toString());
+                    md.setImplementations(methodImpl);
 
                     methods.add(md);
                 }
@@ -869,7 +879,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             ImportUtils.addImportType(classImports, serviceInterface.getFullyQualifiedNameWithoutTypeParameters());
         }
 
-        classDatas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
+        classDatas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
         classDatas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Service Implementation for " + modelClass));
         classDatas.put(CodeConstants.PACKAGE_NAME, classType.getPackageName());
         classDatas.put(CodeConstants.CLASS_TYPE, CodeConstants.TYPE_CLASS);
@@ -905,7 +915,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         StringBuilder sb = new StringBuilder();
         Map<String, Object> interfaceDatas = new HashMap<>();
-        interfaceDatas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
+        interfaceDatas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
         interfaceDatas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Manager Interface for " + modelClass));
 
         Set<String> interfaceImports = new TreeSet<>();
@@ -913,7 +923,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         String baseInterface = (String) getAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
         if (StringUtility.stringHasValue(baseInterface)) {
             ImportUtils.addImportType(interfaceImports, baseInterface);
-            String managerSuperClass = classToSuperClass(TypeUtils.loadClass(baseInterface), modelBaseClass, modelClass, interfaceImports);
+            String managerSuperClass = classToSuperClass(TypeUtils.loadClass(baseInterface), modelBaseClass, new FullyQualifiedJavaType(getBaseRecordType()), interfaceImports);
             interfaceDatas.put(CodeConstants.SUPER_CLASS, managerSuperClass);
             setAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS, managerSuperClass);
         }
@@ -933,7 +943,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         if (StringUtility.stringHasValue(baseClass)) {
             FullyQualifiedJavaType baseClassType = new FullyQualifiedJavaType(baseClass);
             ImportUtils.addImportType(classImports, baseClassType.getFullyQualifiedNameWithoutTypeParameters());
-            classDatas.put(CodeConstants.SUPER_CLASS, classToSuperClass(TypeUtils.loadClass(baseClass), modelBaseClass, modelClass, classImports));
+            classDatas.put(CodeConstants.SUPER_CLASS, classToSuperClass(TypeUtils.loadClass(baseClass), modelBaseClass, new FullyQualifiedJavaType(getBaseRecordType()), classImports));
         }
 
         FullyQualifiedJavaType serviceType = new FullyQualifiedJavaType(
@@ -969,10 +979,12 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             if (methodList != null && !methodList.isEmpty()) {
                 String baseServiceInterface = (String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
                 for (Method method : methodList) {
-                    // check if return baseDao
+                    // check if return base service
                     if (!method.getReturnType().getTypeName().equals(baseServiceInterface)) {
                         continue;
                     }
+                    ImportUtils.addImportType(classImports, baseServiceInterface);
+                    
                     List<String> modifiers = new ArrayList<String>();
                     if (Modifier.isProtected(method.getModifiers())) {
                         modifiers.add(Modifier.toString(Modifier.PROTECTED));
@@ -990,7 +1002,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
                     md.setReturnType((String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS));
                     sb.setLength(0);
                     sb.append("return ").append(serviceField.getName()).append(Constants.SEMICOLON);
-                    md.setImplementation(sb.toString());
+
+                    List<String> methodImpl = new ArrayList<>();
+                    methodImpl.add(sb.toString());
+                    md.setImplementations(methodImpl);
 
                     methods.add(md);
                 }
@@ -1004,7 +1019,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             ImportUtils.addImportType(classImports, managerInterface.getFullyQualifiedNameWithoutTypeParameters());
         }
 
-        classDatas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
+        classDatas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
         classDatas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Manager Implementation for " + modelClass));
         classDatas.put(CodeConstants.PACKAGE_NAME, classType.getPackageName());
         classDatas.put(CodeConstants.CLASS_TYPE, CodeConstants.TYPE_CLASS);
@@ -1041,16 +1056,16 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         Set<String> classImports = new TreeSet<>();
         Map<String, Object> classDatas = new HashMap<>();
         FullyQualifiedJavaType classType = new FullyQualifiedJavaType(
-                (String) getAttribute(CorePropertyRegistry.CONTROLLER + CorePropertyRegistry.IMPL + Constants.DOT + CorePropertyRegistry.ANY_CLASS));
-        String baseClass = (String) getAttribute(CorePropertyRegistry.CONTROLLER + CorePropertyRegistry.IMPL + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
+                (String) getAttribute(CorePropertyRegistry.CONTROLLER + Constants.DOT + CorePropertyRegistry.ANY_CLASS));
+        String baseClass = (String) getAttribute(CorePropertyRegistry.CONTROLLER + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
         if (StringUtility.stringHasValue(baseClass)) {
             FullyQualifiedJavaType baseClassType = new FullyQualifiedJavaType(baseClass);
             ImportUtils.addImportType(classImports, baseClassType.getFullyQualifiedNameWithoutTypeParameters());
-            classDatas.put(CodeConstants.SUPER_CLASS, classToSuperClass(TypeUtils.loadClass(baseClass), modelBaseClass, modelClass, classImports));
+            classDatas.put(CodeConstants.SUPER_CLASS, classToSuperClass(TypeUtils.loadClass(baseClass), modelBaseClass, new FullyQualifiedJavaType(getBaseRecordType()), classImports));
         }
 
         FullyQualifiedJavaType managerType = new FullyQualifiedJavaType(
-                (String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + CorePropertyRegistry.ANY_CLASS));
+                (String) getAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + CorePropertyRegistry.ANY_CLASS));
         List<FieldData> fields = new ArrayList<>();
         FieldData managerField = new FieldData();
         List<String> fieldModifiers = new ArrayList<>();
@@ -1082,7 +1097,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         classAnnotations.add(sb.toString());
 
         sb.setLength(0);
-        sb.append(AnnotationType.REQUESTMAPPING.getAnnotation()).append(Constants.LESS_THAN).append(Constants.PARENTHESES_LEFT).append(Constants.SLASH);
+        sb.append(AnnotationType.REQUESTMAPPING.getAnnotation()).append(Constants.PARENTHESES_LEFT).append(Constants.DOUBLE_QUOTATION).append(Constants.SLASH);
         sb.append(fullyQualifiedTable.getIntrospectedTableName().toLowerCase());
         sb.append(Constants.DOUBLE_QUOTATION).append(Constants.PARENTHESES_RIGHT);
         classAnnotations.add(sb.toString());
@@ -1096,36 +1111,64 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             if (methodList != null && !methodList.isEmpty()) {
                 String baseManagerInterface = (String) getAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + PropertyRegistry.ANY_ROOT_CLASS);
                 for (Method method : methodList) {
-                    // check if return baseDao
-                    if (!method.getReturnType().getTypeName().equals(baseManagerInterface)) {
-                        continue;
-                    }
-                    List<String> modifiers = new ArrayList<String>();
-                    if (Modifier.isProtected(method.getModifiers())) {
-                        modifiers.add(Modifier.toString(Modifier.PROTECTED));
-                    } else {
-                        modifiers.add(Modifier.toString(Modifier.PUBLIC));
-                    }
-                    List<String> annotations = new ArrayList<String>();
-                    annotations.add(AnnotationType.OVERRIDE.getAnnotation());
-                    ImportUtils.addImportType(classImports, AnnotationType.OVERRIDE.getClassName());
+                    // check if return base manager
+                    if (method.getReturnType().getTypeName().equals(baseManagerInterface)) {
+                        ImportUtils.addImportType(classImports, baseManagerInterface);
+                        
+                        List<String> modifiers = new ArrayList<String>();
+                        if (Modifier.isProtected(method.getModifiers())) {
+                            modifiers.add(Modifier.toString(Modifier.PROTECTED));
+                        } else {
+                            modifiers.add(Modifier.toString(Modifier.PUBLIC));
+                        }
+                        List<String> annotations = new ArrayList<String>();
+                        annotations.add(AnnotationType.OVERRIDE.getAnnotation());
+                        ImportUtils.addImportType(classImports, AnnotationType.OVERRIDE.getClassName());
 
-                    MethodData md = new MethodData();
-                    md.setName(method.getName());
-                    md.setModifiers(modifiers);
-                    md.setAnnotations(annotations);
-                    md.setReturnType((String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS));
-                    sb.setLength(0);
-                    sb.append("return ").append(managerField.getName()).append(Constants.SEMICOLON);
-                    md.setImplementation(sb.toString());
+                        MethodData md = new MethodData();
+                        md.setName(method.getName());
+                        md.setModifiers(modifiers);
+                        md.setAnnotations(annotations);
+                        md.setReturnType((String) getAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + CorePropertyRegistry.ANY_GENERIC_ROOT_CLASS));
+                        sb.setLength(0);
+                        sb.append("return ").append(managerField.getName()).append(Constants.SEMICOLON);
 
-                    methods.add(md);
+                        List<String> methodImpl = new ArrayList<>();
+                        methodImpl.add(sb.toString());
+                        md.setImplementations(methodImpl);
+
+                        methods.add(md);
+                    } else if (method.getReturnType().getTypeName().equals(String.class.getName())) {
+                        List<String> modifiers = new ArrayList<String>();
+                        if (Modifier.isProtected(method.getModifiers())) {
+                            modifiers.add(Modifier.toString(Modifier.PROTECTED));
+                        } else {
+                            modifiers.add(Modifier.toString(Modifier.PUBLIC));
+                        }
+                        List<String> annotations = new ArrayList<String>();
+                        annotations.add(AnnotationType.OVERRIDE.getAnnotation());
+                        ImportUtils.addImportType(classImports, AnnotationType.OVERRIDE.getClassName());
+
+                        MethodData md = new MethodData();
+                        md.setName(method.getName());
+                        md.setModifiers(modifiers);
+                        md.setAnnotations(annotations);
+                        md.setReturnType(String.class.getSimpleName());
+                        sb.setLength(0);
+                        sb.append("return ").append(Constants.DOUBLE_QUOTATION).append(StringUtils.uncapitalize(modelClass)).append(Constants.DOUBLE_QUOTATION).append(Constants.SEMICOLON);
+
+                        List<String> methodImpl = new ArrayList<>();
+                        methodImpl.add(sb.toString());
+                        md.setImplementations(methodImpl);
+
+                        methods.add(md);
+                    }
                 }
             }
             classDatas.put(CodeConstants.METHODS, methods);
         }
 
-        classDatas.put(CodeConstants.FILE_COMENT, CommentsUtils.getFileComment());
+        classDatas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
         classDatas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Controller for " + modelClass));
         classDatas.put(CodeConstants.PACKAGE_NAME, classType.getPackageName());
         classDatas.put(CodeConstants.CLASS_TYPE, CodeConstants.TYPE_CLASS);
@@ -1146,9 +1189,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             answer.addAll(modelFiles);
         }
 
-        List<GeneratedJavaFile> daoFiles = getGeneratedDaoFiles();
-        if (daoFiles != null && !daoFiles.isEmpty()) {
-            answer.addAll(daoFiles);
+        List<GeneratedJavaFile> mapperFiles = getGeneratedMapperClientFiles();
+        if (mapperFiles != null && !mapperFiles.isEmpty()) {
+            answer.addAll(mapperFiles);
         }
 
         List<GeneratedJavaFile> serviceFiles = getGeneratedServiceFiles();
@@ -1300,9 +1343,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
      */
     protected List<GeneratedXmlFile> getGeneratedXMLMapperFiles() {
         List<GeneratedXmlFile> answer = new ArrayList<>();
-        String path = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
-        String templateFiles = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
-        String ext = (String) getAttribute(CorePropertyRegistry.MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
+        String path = (String) getAttribute(CorePropertyRegistry.XML_MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
+        String templateFiles = (String) getAttribute(CorePropertyRegistry.XML_MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
+        String ext = (String) getAttribute(CorePropertyRegistry.XML_MAPPER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_EXT);
         if (!(StringUtility.stringHasValue(path) && StringUtility.stringHasValue(templateFiles) && StringUtility.stringHasValue(ext))) {
             return answer;
         }
@@ -1373,7 +1416,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
     @SuppressWarnings("unchecked")
     protected void initTemplateGenerator() {
-        templateGeneraterClass = (Class<? extends TemplateGenerator>) TypeUtils.loadClass((String) getAttribute(CorePropertyRegistry.TEMPLATE_GENERATER_IMPL));
+        templateGeneratorClass = (Class<? extends TemplateGenerator>) TypeUtils.loadClass(context.getProperty(CorePropertyRegistry.TEMPLATE_GENERATOR_IMPL));
     }
 
     /**
@@ -1381,7 +1424,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
      * 
      * @param baseModelClass
      */
-    protected String classToSuperClass(Class<?> clazz, String baseModelClass, String modelClass, Set<String> imports) {
+    protected String classToSuperClass(Class<?> clazz, String baseModelClass, FullyQualifiedJavaType modelType, Set<String> imports) {
         if (clazz == null) {
             return "";
         }
@@ -1411,8 +1454,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
                         if (type instanceof ParameterizedType) {
                             ParameterizedType pt = ParameterizedType.class.cast(type);
                             if (pt.getRawType().getTypeName().equals(baseModelClass)) {
-                                sb.append(modelClass).append(Constants.COMMA_SPACE);
+                                sb.append(modelType.getShortNameWithoutTypeArguments()).append(Constants.COMMA_SPACE);
                                 added = true;
+                                ImportUtils.addImportType(imports, modelType.getFullyQualifiedNameWithoutTypeParameters());
                                 break;
                             }
                         }
@@ -1534,7 +1578,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     protected GeneratedJavaFile generatedJavaFiles(Map<String, Object> datas, String path, String templateFile, String ext, String fileName,
             String targetPackge, String targetProject, String encoding) {
         try {
-            TemplateGenerator tg = templateGeneraterClass.getDeclaredConstructor().newInstance();
+            TemplateGenerator tg = templateGeneratorClass.getDeclaredConstructor().newInstance();
             tg.setTemplatePath(path);
             tg.setTemplateExt(ext);
             return new TemplateGeneratedJavaFile(tg, templateFile, datas, fileName, targetPackge, targetProject, encoding);
@@ -1559,7 +1603,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     protected GeneratedXmlFile generatedTextFiles(Map<String, Object> datas, String path, String templateFile, String ext, String fileName, String targetPackge,
             String targetProject, String encoding) {
         try {
-            TemplateGenerator tg = templateGeneraterClass.getDeclaredConstructor().newInstance();
+            TemplateGenerator tg = templateGeneratorClass.getDeclaredConstructor().newInstance();
             tg.setTemplatePath(path);
             tg.setTemplateExt(ext);
             return new TemplateGeneratedXmlFile(tg, templateFile, datas, fileName, targetPackge, targetProject);

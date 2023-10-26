@@ -50,7 +50,7 @@ public enum AnnotationType {
     /**
      * Request mapping Annotation
      */
-    REQUESTMAPPING("@Requestmapping", "org.springframework.web.bind.annotation.RequestMapping", "Requestmapping Annotation");
+    REQUESTMAPPING("@RequestMapping", "org.springframework.web.bind.annotation.RequestMapping", "Requestmapping Annotation");
 
     /**
      * annotation string

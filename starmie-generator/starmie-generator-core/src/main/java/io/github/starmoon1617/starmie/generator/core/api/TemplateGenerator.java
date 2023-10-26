@@ -6,6 +6,8 @@ package io.github.starmoon1617.starmie.generator.core.api;
 
 import java.util.Map;
 
+import io.github.starmoon1617.starmie.generator.core.constant.Constants;
+
 /**
  * base class for template
  * 
@@ -52,7 +54,7 @@ public abstract class TemplateGenerator {
      * @return the templateExt
      */
     public String getTemplateExt() {
-        return templateExt;
+        return (templateExt.startsWith(Constants.DOT) ? templateExt : Constants.DOT.concat(templateExt));
     }
 
     /**

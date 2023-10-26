@@ -42,6 +42,9 @@ public class TemplateGeneratedXmlFile extends GeneratedXmlFile {
     public TemplateGeneratedXmlFile(TemplateGenerator template, String templateFile, Map<String, Object> datas, String fileName, String targetPackage,
             String targetProject) {
         super(null, fileName, targetPackage, targetProject, false, null);
+        this.datas = datas;
+        this.template = template;
+        this.templateFile = templateFile;
     }
     
     @Override

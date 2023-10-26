@@ -29,7 +29,7 @@ public class MethodData extends BaseData {
     /**
      * implementation code for a method
      */
-    private String implementation;
+    private List<String> implementations;
 
     /**
      * return type
@@ -67,18 +67,18 @@ public class MethodData extends BaseData {
     }
 
     /**
-     * @return the implementation
+     * @return the implementations
      */
-    public String getImplementation() {
-        return implementation;
+    public List<String> getImplementations() {
+        return implementations;
     }
 
     /**
-     * @param implementation
-     *            the implementation to set
+     * @param implementations
+     *            the implementations to set
      */
-    public void setImplementation(String implementation) {
-        this.implementation = implementation;
+    public void setImplementations(List<String> implementations) {
+        this.implementations = implementations;
     }
 
     /**

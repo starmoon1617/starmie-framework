@@ -35,6 +35,11 @@ public class ConfigurationPropertyRegistry {
      * fileEncoding
      */
     public static final String CONTEXT_FILE_ENCODING = "context.fileEncoding";
+    
+    /**
+     * fileEncoding
+     */
+    public static final String CONTEXT_TEMPLATE_GENERATOR = "context.templateGenerator";
 
     /**
      * driverClass

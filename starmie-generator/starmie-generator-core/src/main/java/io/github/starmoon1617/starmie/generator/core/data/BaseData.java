@@ -14,19 +14,19 @@ import java.util.List;
  * @author Nathan Liao
  */
 public class BaseData implements Serializable {
-    
+
     private static final long serialVersionUID = 4769324161558650001L;
 
     /**
      * name for class, field, method
      */
     private String name;
-    
+
     /**
      * comment for class, field, method
      */
-    private String comment;
-    
+    private List<String> comments;
+
     /**
      * annotations for class, field, method
      */
@@ -40,24 +40,26 @@ public class BaseData implements Serializable {
     }
 
     /**
-     * @param name the name to set
+     * @param name
+     *            the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return the comment
+     * @return the comments
      */
-    public String getComment() {
-        return comment;
+    public List<String> getComments() {
+        return comments;
     }
 
     /**
-     * @param comment the comment to set
+     * @param comments
+     *            the comments to set
      */
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 
     /**
@@ -68,7 +70,8 @@ public class BaseData implements Serializable {
     }
 
     /**
-     * @param annotations the annotations to set
+     * @param annotations
+     *            the annotations to set
      */
     public void setAnnotations(List<String> annotations) {
         this.annotations = annotations;
