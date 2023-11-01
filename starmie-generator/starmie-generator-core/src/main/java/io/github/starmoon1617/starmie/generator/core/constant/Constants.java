@@ -42,6 +42,11 @@ public class Constants {
     public static final String ASTERISK = "*";
     
     /**
+     * 百分号 %
+     */
+    public static final String PERCENT = "%";
+    
+    /**
      * 逗号 ,
      */
     public static final String COMMA = ",";

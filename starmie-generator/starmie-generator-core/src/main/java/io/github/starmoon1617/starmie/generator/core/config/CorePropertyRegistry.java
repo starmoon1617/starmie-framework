@@ -57,9 +57,39 @@ public class CorePropertyRegistry {
     public static final String ANY_FILE_EXT = "fileExt";
 
     /**
+     * generic type Generator
+     */
+    public static final String ANY_GENERIC_GENERATOR = "genericTypeGenerator";
+
+    /**
+     * field Generator
+     */
+    public static final String ANY_FIELD_GENERATOR = "fieldGenerator";
+
+    /**
+     * method Generator
+     */
+    public static final String ANY_METHOD_GENERATOR = "methodGenerator";
+
+    /**
      * if use rest controller instead
      */
     public static final String REST_OVER_CONTROLLER = "restOverController";
+
+    /**
+     * model's columns
+     */
+    public static final String MODEL_COLUMNS = "modelColumns";
+
+    /**
+     * fields define in model's super class
+     */
+    public static final String SUPER_FIELDS = "superFields";
+
+    /**
+     * generic define in model's super class
+     */
+    public static final String SUPER_GENERIC = "superGeneric";
 
     /**
      * Generate Model

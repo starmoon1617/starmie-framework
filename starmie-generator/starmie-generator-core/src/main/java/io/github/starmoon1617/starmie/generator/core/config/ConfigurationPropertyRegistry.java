@@ -19,7 +19,17 @@ public class ConfigurationPropertyRegistry {
     /**
      * table name
      */
-    public static final String TABLE_NAME = "tableName";
+    public static final String TABLE_NAME = "table.tableName";
+    
+    /**
+     * catalog
+     */
+    public static final String CATALOG = "table.catalog";
+    
+    /**
+     * schema
+     */
+    public static final String SCHEMA = "table.schema";
 
     /**
      * context id
@@ -75,5 +85,20 @@ public class ConfigurationPropertyRegistry {
      * type 
      */
     public static final String TYPE = "type";
+    
+    /**
+     * method generator
+     */
+    public static final String METHOD_GENERATOR = "methodGenerator";
+    
+    /**
+     * field generator
+     */
+    public static final String FIELD_GENERATOR = "fieldGenerator";
+    
+    /**
+     * generic Type generator
+     */
+    public static final String GENERIC_TYPE_GENERATOR = "genericTypeGenerator";
 
 }

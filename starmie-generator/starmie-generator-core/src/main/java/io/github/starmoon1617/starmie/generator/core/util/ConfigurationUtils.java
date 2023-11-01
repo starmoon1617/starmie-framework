@@ -185,12 +185,14 @@ public class ConfigurationUtils {
      * @param tableName
      * @return
      */
-    public static final void addTableConfiguration(Context context, String tableName) {
+    public static final void addTableConfiguration(Context context, String tableName, String catalog, String schema) {
         if (!StringUtility.stringHasValue(tableName)) {
             return;
         }
         TableConfiguration tableConfiguration = new TableConfiguration(context);
         tableConfiguration.setTableName(tableName);
+        tableConfiguration.setCatalog(catalog);
+        tableConfiguration.setSchema(schema);
         tableConfiguration.setSelectByExampleStatementEnabled(false);
         tableConfiguration.setDeleteByExampleStatementEnabled(false);
         tableConfiguration.setCountByExampleStatementEnabled(false);
@@ -232,10 +234,12 @@ public class ConfigurationUtils {
         context.setScriptGeneratorConfiguration(createJavaClientGeneratorConfiguration(properties, CorePropertyRegistry.GENERATE_SCRIPT + Constants.DOT));
         context.setTextGeneratorConfiguration(createJavaClientGeneratorConfiguration(properties, CorePropertyRegistry.GENERATE_TEXT + Constants.DOT));
 
-        String tableNames = properties.getProperty(ConfigurationPropertyRegistry.TABLE_NAME, Constants.ASTERISK);
+        String tableNames = properties.getProperty(ConfigurationPropertyRegistry.TABLE_NAME, Constants.PERCENT);
+        String catalog = properties.getProperty(ConfigurationPropertyRegistry.CATALOG, null);
+        String schema = properties.getProperty(ConfigurationPropertyRegistry.SCHEMA, null);
         Set<String> tables = StringUtility.tokenize(tableNames);
         for (String tableName : tables) {
-            addTableConfiguration(context, tableName);
+            addTableConfiguration(context, tableName, catalog, schema);
         }
         return configuration;
     }

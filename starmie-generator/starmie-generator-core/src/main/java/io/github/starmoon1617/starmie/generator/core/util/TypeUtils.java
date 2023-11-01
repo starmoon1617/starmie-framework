@@ -4,6 +4,7 @@
  */
 package io.github.starmoon1617.starmie.generator.core.util;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -59,6 +60,9 @@ public class TypeUtils {
      * @return
      */
     public static Class<?> loadClass(String clazz) {
+        if (clazz == null) {
+            return null;
+        }
         Class<?> c = null;
         try {
             c = Class.forName(clazz);
@@ -68,6 +72,12 @@ public class TypeUtils {
         return c;
     }
 
+    /**
+     * 
+     * @param parameterizedTypes
+     * @param imports
+     * @return
+     */
     public static String getParameterizedTypes(String parameterizedTypes, Set<String> imports) {
         List<String> types = StringUtils.split(parameterizedTypes);
         if (types == null || types.isEmpty()) {
@@ -89,5 +99,27 @@ public class TypeUtils {
             sb.append(Constants.GREATER_THAN);
         }
         return sb.toString();
+    }
+
+    /**
+     * check if Implement Serializable interface
+     * 
+     * @param clazz
+     * @return
+     */
+    public static boolean isSerializable(Class<?> clazz) {
+        if (clazz == null) {
+            return false;
+        }
+        Class<?>[] interfaces = clazz.getInterfaces();
+        if (interfaces != null && interfaces.length > 0) {
+            for (Class<?> i : interfaces) {
+                if (Serializable.class.equals(i)) {
+                    return true;
+                }
+            }
+        }
+        // check all super class
+        return isSerializable(clazz.getSuperclass());
     }
 }

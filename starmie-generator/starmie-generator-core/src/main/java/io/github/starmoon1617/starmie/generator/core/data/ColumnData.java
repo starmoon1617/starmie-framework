@@ -47,6 +47,11 @@ public class ColumnData implements Serializable {
     private String nullAble;
 
     /**
+     * remark
+     */
+    private String remark;
+
+    /**
      * @return the column
      */
     public String getColumn() {
@@ -134,6 +139,21 @@ public class ColumnData implements Serializable {
      */
     public void setNullAble(String nullAble) {
         this.nullAble = nullAble;
+    }
+
+    /**
+     * @return the remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param remark
+     *            the remark to set
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }
