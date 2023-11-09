@@ -17,5 +17,10 @@ import io.github.starmoon1617.starmie.generator.core.data.FieldData;
  */
 public interface FieldGenerator extends DataGenerator {
 
+    /**
+     * generate fields
+     * @param attrs
+     * @return
+     */
     List<FieldData> generate(Map<String, Object> attrs);
 }

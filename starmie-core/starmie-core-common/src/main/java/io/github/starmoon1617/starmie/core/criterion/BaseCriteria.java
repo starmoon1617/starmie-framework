@@ -192,7 +192,7 @@ public final class BaseCriteria {
      *            - 一般传入非combina的类型,如传入combina的类型,则创建一个新的Criteria
      * @param combinaName
      *            - 组合名,组合条件时必须传入
-     * @param OperatorType
+     * @param operatorType
      *            - 操作类型
      * @param field
      *            - 字段

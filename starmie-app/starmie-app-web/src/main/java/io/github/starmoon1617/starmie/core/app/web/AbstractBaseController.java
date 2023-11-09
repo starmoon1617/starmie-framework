@@ -143,7 +143,7 @@ public abstract class AbstractBaseController<E extends BaseEntity<ID, U>, ID ext
     /**
      * delete a data
      * 
-     * @param id
+     * @param e
      * @return
      */
     @ResponseBody
@@ -159,7 +159,7 @@ public abstract class AbstractBaseController<E extends BaseEntity<ID, U>, ID ext
     /**
      * delete a data
      * 
-     * @param id
+     * @param e
      * @return
      */
     @ResponseBody

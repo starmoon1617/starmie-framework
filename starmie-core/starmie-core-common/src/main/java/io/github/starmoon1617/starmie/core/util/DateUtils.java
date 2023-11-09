@@ -41,6 +41,10 @@ public class DateUtils {
 
     }
 
+    /**
+     * return current date
+     * @return
+     */
     public static final Date getCurrentDate() {
         return new Date();
     }

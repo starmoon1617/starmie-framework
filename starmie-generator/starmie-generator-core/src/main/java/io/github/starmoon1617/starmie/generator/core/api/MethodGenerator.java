@@ -18,6 +18,8 @@ import io.github.starmoon1617.starmie.generator.core.data.MethodData;
 public interface MethodGenerator extends DataGenerator {
 
     /**
+     * generate methods
+     * 
      * @param attrs
      * @return
      */

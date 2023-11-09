@@ -31,7 +31,6 @@ public class ModelFieldGenerator extends AbstractDataGenerator implements FieldG
      * add field to field list
      * 
      * @param column
-     * @return
      */
     protected void addField(List<FieldData> fields, IntrospectedColumn column) {
         FieldData data = new FieldData();

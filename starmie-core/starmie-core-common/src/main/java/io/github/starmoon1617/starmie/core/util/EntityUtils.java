@@ -36,18 +36,33 @@ import io.github.starmoon1617.starmie.core.json.DateJsonDeserializer;
  */
 public class EntityUtils {
 
+    /**
+     * exclude fields for bean copy
+     */
     private static final String EXCLUDE_ID = "id";
 
+    /**
+     * ObjectMapper instance will show null value
+     */
     private static final ObjectMapper NOM = new ObjectMapper();
 
+    /**
+     * ObjectMapper instance will not show null value
+     */
     private static final ObjectMapper NOTNOM = new ObjectMapper();
 
+    /**
+     * if ObjectMappers initialized
+     */
     private static Boolean omInited = Boolean.FALSE;
 
     static {
         initOm();
     }
 
+    /**
+     * initialize ObjectMappers
+     */
     private static synchronized void initOm() {
         if (!omInited.booleanValue()) {
 

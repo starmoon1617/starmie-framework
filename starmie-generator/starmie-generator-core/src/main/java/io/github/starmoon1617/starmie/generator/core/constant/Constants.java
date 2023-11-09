@@ -77,7 +77,7 @@ public class Constants {
     public static final String DOT = ".";
     
     /**
-     * 小于 <
+     * 小于 &lt;
      */
     public static final String LESS_THAN = "<";
 

@@ -17,6 +17,9 @@ public class BaseDto<D extends Serializable> extends BaseResult {
 
     private static final long serialVersionUID = 6434448563127660960L;
 
+    /**
+     * Generic data 
+     */
     private D data;
 
     /**

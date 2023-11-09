@@ -18,6 +18,10 @@ public class DateConverter implements Converter<Date> {
     
     private String pattern;
     
+    /**
+     * Constructs a new Date Converter with the specified date pattern
+     * @param pattern
+     */
     public DateConverter(String pattern) {
         super();
         this.pattern = pattern;

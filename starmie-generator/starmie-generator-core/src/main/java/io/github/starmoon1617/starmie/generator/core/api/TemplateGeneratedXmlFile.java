@@ -32,12 +32,12 @@ public class TemplateGeneratedXmlFile extends GeneratedXmlFile {
     private String templateFile;
 
     /**
-     * @param document
+     * @param template
+     * @param templateFile
+     * @param datas
      * @param fileName
      * @param targetPackage
      * @param targetProject
-     * @param isMergeable
-     * @param xmlFormatter
      */
     public TemplateGeneratedXmlFile(TemplateGenerator template, String templateFile, Map<String, Object> datas, String fileName, String targetPackage,
             String targetProject) {

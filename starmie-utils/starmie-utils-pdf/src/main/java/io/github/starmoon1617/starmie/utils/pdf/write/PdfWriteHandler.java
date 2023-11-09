@@ -483,6 +483,7 @@ public class PdfWriteHandler<E> {
     }
 
     /**
+     * 从List获取对应下标的值
      * 
      * @param data
      * @param columnNum
@@ -493,7 +494,7 @@ public class PdfWriteHandler<E> {
     }
 
     /**
-     * 
+     * 从Map获取对应key的值
      * @param data
      * @param columnNum
      * @return
@@ -507,7 +508,7 @@ public class PdfWriteHandler<E> {
     }
 
     /**
-     * 
+     * 从data获取对应字段的值
      * @param data
      * @param columnNum
      * @return
@@ -516,10 +517,21 @@ public class PdfWriteHandler<E> {
         return EntityUtils.getValue(data, fieldMap.get(columnNum));
     }
 
+    /**
+     * 获取当前PDF文档对象
+     * @return
+     */
     PDDocument getPDDocument() {
         return pdd;
     }
 
+    /**
+     * 写入分页
+     * @param currentPage
+     * @param totalPage
+     * @param currentPdcs
+     * @throws Exception
+     */
     private void writePagination(int currentPage, int totalPage, PDPageContentStream currentPdcs) throws Exception {
         // 底部空白中间位置
         String text = String.format(pageConf.getPaginationText(), currentPage, totalPage);
@@ -540,6 +552,10 @@ public class PdfWriteHandler<E> {
         currentPdcs.endText();
     }
 
+    /**
+     * 将数据写入到文档中
+     * 
+     */
     private void flush() {
         try {
             if (!CommonUtils.isEmpty(pdpcss)) {
@@ -580,6 +596,9 @@ public class PdfWriteHandler<E> {
         }
     }
 
+    /**
+     * 关闭文档流
+     */
     void close() {
         flush();
     }

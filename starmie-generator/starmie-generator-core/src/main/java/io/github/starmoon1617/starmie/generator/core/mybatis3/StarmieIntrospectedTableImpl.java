@@ -91,6 +91,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
      */
     protected List<AbstractJavaGenerator> textGenerators;
 
+    /**
+     * Constructs a new StarmieIntrospectedTableImpl
+     */
     public StarmieIntrospectedTableImpl() {
         super();
         javaGenerators = new ArrayList<>();
@@ -527,7 +530,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     }
 
     /**
-     * 获取生成的model代码
+     * Get files for model
      * 
      * @return
      */
@@ -606,7 +609,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     }
 
     /**
-     * 获取生成的Mapper代码
+     * Get files for Mapper
      * 
      * @return
      */
@@ -664,6 +667,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * Get files for service
+     * @param attrs
+     * @return
+     */
     @SuppressWarnings("unchecked")
     protected List<GeneratedJavaFile> getGeneratedServiceFiles(Map<String, Object> attrs) {
         List<GeneratedJavaFile> answer = new ArrayList<>();
@@ -848,6 +856,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * Get files for manager
+     * @param attrs
+     * @return
+     */
     @SuppressWarnings("unchecked")
     protected List<GeneratedJavaFile> getGeneratedManagerFiles(Map<String, Object> attrs) {
         List<GeneratedJavaFile> answer = new ArrayList<>();
@@ -1034,6 +1047,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * Get files for controller
+     * @param attrs
+     * @return
+     */
     @SuppressWarnings("unchecked")
     protected List<GeneratedJavaFile> getGeneratedControllerFiles(Map<String, Object> attrs) {
         List<GeneratedJavaFile> answer = new ArrayList<>();
@@ -1208,6 +1226,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    @Override
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         Map<String, Object> attrs = new HashMap<>(attributes);
         attrs.put(CorePropertyRegistry.MODEL + Constants.DOT + CorePropertyRegistry.ANY_CLASS, getBaseRecordType());
@@ -1248,6 +1267,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * Get files for script
+     * @return
+     */
     protected List<GeneratedXmlFile> getGeneratedScriptFiles() {
         List<GeneratedXmlFile> answer = new ArrayList<>();
         if (!(context instanceof CoreContext)) {
@@ -1303,6 +1326,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * Get files for text
+     * @return
+     */
     protected List<GeneratedXmlFile> getGeneratedTextFiles() {
 
         List<GeneratedXmlFile> answer = new ArrayList<>();
@@ -1381,7 +1408,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     }
 
     /**
-     * 获取生成的XML Mapper 文件
+     * Get files for mapper's xml
      * 
      * @return
      */
@@ -1425,6 +1452,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * copy data from IntrospectedColumn to ColumnData
+     * @param column
+     * @return
+     */
     protected ColumnData toColumnData(IntrospectedColumn column) {
         ColumnData cd = new ColumnData();
         cd.setColumn(column.getActualColumnName());
@@ -1459,6 +1491,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         return answer;
     }
 
+    /**
+     * initialize the template Generator
+     */
     @SuppressWarnings("unchecked")
     protected void initTemplateGenerator() {
         templateGeneratorClass = (Class<? extends TemplateGenerator>) TypeUtils.loadClass(context.getProperty(CorePropertyRegistry.TEMPLATE_GENERATOR_IMPL));
@@ -1524,8 +1559,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
     /**
      * check base model class
-     * 
-     * @param baseModelClass
+     * @param clazz
+     * @param fieldNames
+     * @param genericTypes
      */
     protected void processBaseModelClass(Class<?> clazz, Set<String> fieldNames, Map<String, GenericTypeData> genericTypes) {
         if (clazz == null || clazz.isInterface()) {

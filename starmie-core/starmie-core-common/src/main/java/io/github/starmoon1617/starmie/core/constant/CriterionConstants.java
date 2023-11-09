@@ -5,7 +5,7 @@
 package io.github.starmoon1617.starmie.core.constant;
 
 /**
- * 
+ * Constants for Criterion 
  * 
  * @date 2023-10-09
  * @author Nathan Liao

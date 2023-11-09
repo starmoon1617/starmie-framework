@@ -31,7 +31,6 @@ public class JavaData extends BaseData {
      */
     private List<String> imports;
     
-    
     /**
      * super class name
      */

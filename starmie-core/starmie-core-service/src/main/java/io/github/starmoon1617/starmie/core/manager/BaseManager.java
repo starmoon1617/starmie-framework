@@ -22,7 +22,7 @@ public interface BaseManager<E extends BaseEntity<ID, U>, ID extends Serializabl
     /**
      * 查找
      * 
-     * @param id
+     * @param e
      * @return
      */
     E find(E e);
@@ -62,7 +62,6 @@ public interface BaseManager<E extends BaseEntity<ID, U>, ID extends Serializabl
      *            - 分页对象
      * @param criteria
      *            - 查询条件
-     * @return
      */
     void find(final Pagination<E> pagination, final BaseCriteria criteria);
 

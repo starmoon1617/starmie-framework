@@ -35,7 +35,6 @@ public class ExcelReadJsonHandler<T> extends ExcelReadHandler<T> {
      * @param fieldNames
      * @param rowListener
      * @param type
-     * @param rowRaw
      */
     public ExcelReadJsonHandler(List<String> fieldNames, JavaType type, RowReadListener<T> rowListener) {
         super(fieldNames, rowListener);

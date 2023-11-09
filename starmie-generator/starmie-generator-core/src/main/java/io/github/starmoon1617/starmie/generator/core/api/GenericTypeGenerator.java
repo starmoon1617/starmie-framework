@@ -15,7 +15,7 @@ import java.util.Map;
 public interface GenericTypeGenerator extends DataGenerator {
     
     /**
-     * create Generic Type String (not include "<" and ">")
+     * create Generic Type String (not include "&lt;" and ">")
      * @return
      */
     String generate(Map<String, Object> attrs);

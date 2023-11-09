@@ -42,10 +42,13 @@ public class TemplateGeneratedJavaFile extends GeneratedJavaFile {
     private String templateFile;
 
     /**
-     * @param compilationUnit
+     * @param template
+     * @param templateFile
+     * @param datas
+     * @param fileName
+     * @param targetPackage
      * @param targetProject
      * @param fileEncoding
-     * @param javaFormatter
      */
     public TemplateGeneratedJavaFile(TemplateGenerator template, String templateFile, Map<String, Object> datas, String fileName, String targetPackage,
             String targetProject, String fileEncoding) {

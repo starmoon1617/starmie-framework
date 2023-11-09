@@ -23,6 +23,9 @@ public class TemplateUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateUtils.class);
 
+    /**
+     * Configuration for FreeMarker
+     */
     private static Configuration CONFIGURATION;
 
     private TemplateUtils() {

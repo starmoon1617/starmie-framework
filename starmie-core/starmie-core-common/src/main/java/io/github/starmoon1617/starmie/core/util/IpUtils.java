@@ -72,6 +72,12 @@ public class IpUtils {
         return LOCALADDRESS;
     }
 
+    /**
+     * get InetAddress
+     * 
+     * @param networkInterface
+     * @return
+     */
     private static InetAddress getInetAddress(NetworkInterface networkInterface) {
         Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
         if (addresses == null) {
@@ -99,6 +105,9 @@ public class IpUtils {
         return inetAddress;
     }
 
+    /**
+     * initialize LocalAddress
+     */
     private static synchronized void initLocalAddress() {
         synchronized (inited) {
             if (!inited.get()) {

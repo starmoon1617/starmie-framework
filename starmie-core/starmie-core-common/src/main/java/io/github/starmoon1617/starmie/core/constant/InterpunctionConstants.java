@@ -5,7 +5,7 @@
 package io.github.starmoon1617.starmie.core.constant;
 
 /**
- * 
+ * Constants for Interpunction
  * 
  * @date 2023-10-09
  * @author Nathan Liao
@@ -226,12 +226,12 @@ public class InterpunctionConstants {
     public static final String POUND_STR = "#";
 
     /**
-     * 小于 <
+     * 小于 &lt;
      */
     public static final char LESS_THAN = '<';
 
     /**
-     * 小于 <
+     * 小于 &lt;
      */
     public static final String LESS_THAN_STR = "<";
 

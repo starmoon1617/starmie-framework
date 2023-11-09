@@ -19,7 +19,7 @@ import io.github.starmoon1617.starmie.generator.core.data.MethodData;
 import io.github.starmoon1617.starmie.generator.core.util.CommentsUtils;
 
 /**
- * 
+ * help to Generate methods for Model class
  * 
  * @date 2023-10-27
  * @author Nathan Liao
@@ -30,7 +30,6 @@ public class ModelMethodGenerator extends AbstractDataGenerator implements Metho
      * add Getter to method list
      * 
      * @param column
-     * @return
      */
     protected void addGetterAndSetter(List<MethodData> methods, IntrospectedColumn column) {
         // get fieldName

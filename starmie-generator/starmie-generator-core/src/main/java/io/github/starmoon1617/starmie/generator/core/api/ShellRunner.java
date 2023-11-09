@@ -120,14 +120,28 @@ public class ShellRunner {
         writeLine(getString("Usage")); //$NON-NLS-1$
     }
 
+    /**
+     * write the message
+     * 
+     * @param message
+     */
     private static void writeLine(String message) {
         System.out.println(message);
     }
 
+    /**
+     * next line
+     */
     private static void writeLine() {
         System.out.println();
     }
 
+    /**
+     * parse the command
+     * 
+     * @param args
+     * @return
+     */
     private static Map<String, String> parseCommandLine(String[] args) {
         List<String> errors = new ArrayList<>();
         Map<String, String> arguments = new HashMap<>();

@@ -50,9 +50,7 @@ public class PdfUtils {
      * 根据纸张的大小类型,纵横类型和 DPI 计算出纸张的 像素大小
      * calculate page Rectangle according to page type
      * 
-     * @param pde
-     * @param poe
-     * @param dpi
+     * @param pageConf
      * @return
      */
     public static PDRectangle getPageRectangle(PageConf pageConf) {
@@ -86,11 +84,11 @@ public class PdfUtils {
      * 调整修正签章的位置
      * adjust position for seal
      * 
-     * @param seal
+     * @param sealConf
      * @param posX
      * @param posY
-     * @param width
-     * @param height
+     * @param pageWidth
+     * @param pageHeight
      */
     public static void adjustPos(SealConf sealConf, float posX, float posY, float pageWidth, float pageHeight) {
         sealConf.setPosX(posX);

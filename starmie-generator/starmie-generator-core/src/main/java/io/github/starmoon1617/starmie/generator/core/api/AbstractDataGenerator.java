@@ -29,7 +29,7 @@ public abstract class AbstractDataGenerator implements DataGenerator {
     /**
      * add new import class
      * 
-     * @param impt
+     * @param type
      */
     public void addImports(String type) {
         ImportUtils.addImportType(imports, type);

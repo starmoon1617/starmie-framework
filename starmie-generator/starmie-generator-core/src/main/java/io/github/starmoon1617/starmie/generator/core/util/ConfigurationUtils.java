@@ -182,8 +182,10 @@ public class ConfigurationUtils {
     /**
      * add Table Configuration
      * 
+     * @param context
      * @param tableName
-     * @return
+     * @param catalog
+     * @param schema
      */
     public static final void addTableConfiguration(Context context, String tableName, String catalog, String schema) {
         if (!StringUtility.stringHasValue(tableName)) {

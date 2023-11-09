@@ -33,7 +33,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * 字段名和表别名使用驼峰方式编码,转换为_连接的小写字符,如:userName转换为user_name <br>
  * 组合 :0-无AND/OR,1-AND,2-OR,3-(AND),4-(OR),5-AND(),6-OR(),7-() <br>
  * 数据类型:I-Integer,L-Long,S-String,H-Short,D-Date,T-DateTime,B-BigDecimal <br>
- * 操作符:0-=,1-!=,2->,3->=,4-<,5-<=,6-in,7-not in,8-is null,9-is not
+ * 操作符:0-=,1-!=,2->,3->=,4-&lt;,5-&lt;=,6-in,7-not in,8-is null,9-is not
  * null,10-between,11-like '%x%',12-like 'x_',13-like '_x',14-like '_x_',
  * 15-like 'x%', 16-like '%x' <br>
  * 排序:0-ASC,1-DESC <br>

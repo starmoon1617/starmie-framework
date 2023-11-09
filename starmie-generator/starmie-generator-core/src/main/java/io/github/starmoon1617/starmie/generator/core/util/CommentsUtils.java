@@ -24,6 +24,9 @@ import io.github.starmoon1617.starmie.generator.core.constant.Constants;
  */
 public class CommentsUtils {
 
+    /**
+     * date formatter
+     */
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
 
     private CommentsUtils() {
@@ -53,7 +56,7 @@ public class CommentsUtils {
 
     /**
      * default comment for a Class
-     * 
+     * @param comment
      * @return
      */
     public static String getTypeComment(String comment) {
@@ -75,7 +78,7 @@ public class CommentsUtils {
 
     /**
      * return comment for model class
-     * 
+     * @param introspectedTable
      * @return
      */
     public static String getModelComment(IntrospectedTable introspectedTable) {
@@ -104,7 +107,6 @@ public class CommentsUtils {
     /**
      * return field comment for a model
      * 
-     * @param introspectedTable
      * @param introspectedColumn
      * @return
      */
@@ -134,7 +136,6 @@ public class CommentsUtils {
     /**
      * return Getter method comment for a model
      * 
-     * @param introspectedTable
      * @param introspectedColumn
      * @return
      */
@@ -168,7 +169,6 @@ public class CommentsUtils {
     /**
      * return Setter method comment for a model
      * 
-     * @param introspectedTable
      * @param introspectedColumn
      * @return
      */

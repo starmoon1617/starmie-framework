@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 基础类,定义创建,更新字段 
+ * 基础类,定义创建,更新字段 <br>
  * Base Class, define create and update fields.
  * 
  * @date 2023-10-08
