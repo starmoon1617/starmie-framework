@@ -4,8 +4,6 @@
  */
 package io.github.starmoon1617.starmie.core.base;
 
-import java.io.Serializable;
-
 /**
  * 接口/服务返回的结果DTO
  * Base DTO Class for interface/service
@@ -13,7 +11,7 @@ import java.io.Serializable;
  * @date 2023-10-08
  * @author Nathan Liao
  */
-public class BaseDto<D extends Serializable> extends BaseResult {
+public class BaseDto<D> extends BaseResult {
 
     private static final long serialVersionUID = 6434448563127660960L;
 
