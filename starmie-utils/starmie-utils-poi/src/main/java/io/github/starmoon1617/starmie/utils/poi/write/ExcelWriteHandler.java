@@ -7,6 +7,8 @@ package io.github.starmoon1617.starmie.utils.poi.write;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -25,6 +27,7 @@ import io.github.starmoon1617.starmie.core.util.CommonUtils;
 import io.github.starmoon1617.starmie.core.util.EntityUtils;
 import io.github.starmoon1617.starmie.utils.doc.constant.FontConstants;
 import io.github.starmoon1617.starmie.utils.doc.convert.Converter;
+import io.github.starmoon1617.starmie.utils.doc.enums.DateMode;
 import io.github.starmoon1617.starmie.utils.doc.head.DocHead;
 
 /**
@@ -34,6 +37,11 @@ import io.github.starmoon1617.starmie.utils.doc.head.DocHead;
  * @author Nathan Liao
  */
 public class ExcelWriteHandler<E> {
+    
+    /**
+     * date formatter
+     */
+    private DateTimeFormatter formatter;
 
     /**
      * workbook
@@ -75,7 +83,15 @@ public class ExcelWriteHandler<E> {
      */
     private int columnNum;
     
-    ExcelWriteHandler(SXSSFWorkbook wb, String sheetName, List<DocHead> heads) {
+    /**
+     * Create a Excel write handler
+     * 
+     * @param wb
+     * @param sheetName
+     * @param heads
+     * @param dateMode
+     */
+    ExcelWriteHandler(SXSSFWorkbook wb, String sheetName, List<DocHead> heads, DateMode dateMode) {
         this.wb = wb;
         sheet = wb.createSheet(sheetName);
         fieldMap = new LinkedHashMap<>();
@@ -83,10 +99,17 @@ public class ExcelWriteHandler<E> {
         hasConverter = false;
         rowNum = 0;
         cellStyle = getStyle(wb, false);
+        if (dateMode != null && DateMode.NONE != dateMode) {
+            formatter = DateTimeFormatter.ofPattern(dateMode.getPattern()); 
+        }
         // init excel head
         writeHeads(heads, getStyle(wb, true));
     }
     
+    /**
+     * 获取当前的Workbook对象
+     * @return
+     */
     SXSSFWorkbook getWorkbook() {
         return wb;
     }
@@ -232,6 +255,7 @@ public class ExcelWriteHandler<E> {
         cell.setCellStyle(cellStyle);
         if (value == null) {
             cell.setBlank();
+            return;
         }
         if (hasConverter) {
             Converter<?> converter = convertMap.get(columnNum);
@@ -257,7 +281,11 @@ public class ExcelWriteHandler<E> {
             return;
         }
         if (value instanceof Date) {
-            cell.setCellValue(Date.class.cast(value));
+            if (formatter != null) {
+                cell.setCellValue(LocalDateTime.ofInstant(Date.class.cast(value).toInstant(), ZoneId.systemDefault()).format(formatter));
+            } else {
+                cell.setCellValue(Date.class.cast(value));
+            }
             return;
         }
         if (value instanceof Double) {
@@ -269,15 +297,27 @@ public class ExcelWriteHandler<E> {
             return;
         }
         if (value instanceof LocalDate) {
-            cell.setCellValue(LocalDate.class.cast(value));
+            if (formatter != null) {
+                cell.setCellValue(LocalDate.class.cast(value).format(formatter));
+            } else {
+                cell.setCellValue(LocalDate.class.cast(value));
+            }
             return;
         }
         if (value instanceof LocalDateTime) {
-            cell.setCellValue(LocalDateTime.class.cast(value));
+            if (formatter != null) {
+                cell.setCellValue(LocalDateTime.class.cast(value).format(formatter));
+            } else {
+                cell.setCellValue(LocalDateTime.class.cast(value));
+            }
             return;
         }
         if (value instanceof Calendar) {
-            cell.setCellValue(Calendar.class.cast(value));
+            if (formatter != null) {
+                cell.setCellValue(LocalDateTime.ofInstant(Calendar.class.cast(value).toInstant(), ZoneId.systemDefault()).format(formatter));
+            } else {
+                cell.setCellValue(Calendar.class.cast(value));
+            }
             return;
         }
         // default write as String

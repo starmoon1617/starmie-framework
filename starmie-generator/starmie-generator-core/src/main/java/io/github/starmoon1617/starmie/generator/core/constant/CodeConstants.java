@@ -17,6 +17,21 @@ public class CodeConstants {
     }
     
     /**
+     * current date  yyyy-MM-dd
+     */
+    public static String DATE = "date";
+    
+    /**
+     * current date  yyyy-MM-dd HH:mm:ss
+     */
+    public static String DATE_TIME = "dateTime";
+    
+    /**
+     * current date  object
+     */
+    public static String CURRENT_DATE = "currentDate";
+    
+    /**
      * XML name space class
      */
     public static String CLASS_NAME = "className";
@@ -45,6 +60,11 @@ public class CodeConstants {
      * table name
      */
     public static String TABLE_NAME = "tableName";
+    
+    /**
+     * table remark
+     */
+    public static String REMARK = "remark";
     
     /**
      * Primary column list
@@ -92,6 +112,11 @@ public class CodeConstants {
     public static String PACKAGE_NAME = "packageName";
     
     /**
+     * sub package name 
+     */
+    public static String SUB_PACKAGE_NAME = "subPackageName";
+    
+    /**
      * import list
      */
     public static String IMPORTS = "imports";
@@ -121,5 +146,10 @@ public class CodeConstants {
      * mapping for controller
      */
     public static String MAPPING = "mapping";
+    
+    /**
+     * counter
+     */
+    public static String COUNTER = "counter";
 
 }

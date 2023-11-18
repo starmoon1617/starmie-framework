@@ -55,6 +55,11 @@ public class CorePropertyRegistry {
      * file EXT for files generated
      */
     public static final String ANY_FILE_EXT = "fileExt";
+    
+    /**
+     * file name to use model name, only apply to first template
+     */
+    public static final String OVER_TEMPLATE_FILE_NAME = "overFileName";
 
     /**
      * generic type Generator

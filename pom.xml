@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.starmoon1617</groupId>
     <artifactId>starmie</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.3</version>
     <packaging>pom</packaging>
     <description>starmie framework</description>
     <name>starmie</name>

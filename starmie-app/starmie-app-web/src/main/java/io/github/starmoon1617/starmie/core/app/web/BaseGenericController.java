@@ -26,6 +26,7 @@ import io.github.starmoon1617.starmie.core.criterion.BaseCriteria;
 import io.github.starmoon1617.starmie.core.criterion.enums.LimitationType;
 import io.github.starmoon1617.starmie.core.util.CommonUtils;
 import io.github.starmoon1617.starmie.core.util.EntityUtils;
+import io.github.starmoon1617.starmie.utils.doc.enums.DateMode;
 import io.github.starmoon1617.starmie.utils.doc.head.DocHead;
 import io.github.starmoon1617.starmie.utils.poi.read.ExcelReadHandler;
 import io.github.starmoon1617.starmie.utils.poi.read.ExcelReader;
@@ -106,6 +107,14 @@ public class BaseGenericController<E> extends BaseController {
         addConverters(docHeads);
         return docHeads;
     }
+    
+    /**
+     * get Date mode for excel export, default Date time mode
+     * @return
+     */
+    protected DateMode getDateMode() {
+        return DateMode.DATETIME;
+    }
 
     /**
      * export
@@ -118,7 +127,7 @@ public class BaseGenericController<E> extends BaseController {
     public void doExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String fileName = request.getParameter("fileName");
-        if (CommonUtils.isNotBlank(fileName)) {
+        if (!CommonUtils.isNotBlank(fileName)) {
             fileName = "export_datas";
         }
 
@@ -131,7 +140,7 @@ public class BaseGenericController<E> extends BaseController {
             }
             int pageSize = baseCriteria.getLimit();
 
-            handler = ExcelWriter.buildExcelWriteHandler(fileName, getExportHeads(request));
+            handler = ExcelWriter.buildExcelWriteHandler(fileName, getExportHeads(request), getDateMode());
 
             int total = count(baseCriteria);
             if (total <= 0) {
