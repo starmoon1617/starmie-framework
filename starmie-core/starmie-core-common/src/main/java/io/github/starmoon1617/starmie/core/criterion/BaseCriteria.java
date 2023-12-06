@@ -182,6 +182,109 @@ public final class BaseCriteria {
         }
         return sb.toString();
     }
+    
+    /**
+     * 添加LK条件, 默认添加一个NON_COMBINA_AND的条件
+     * 
+     * @param field
+     *            - 字段
+     * @param value
+     *            - 值
+     *
+     */
+    public BaseCriteria addLike(String field, Object value) {
+        if (value == null) {
+            return this;
+        }
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.LK, null, field, value);
+    }
+    
+    /**
+     * 添加LK条件, 默认添加一个NON_COMBINA_AND的条件
+     * 
+     * @param alias - 表的别名
+     * @param field
+     *            - 字段
+     * @param value
+     *            - 值
+     *
+     */
+    public BaseCriteria addLike(String alias, String field, Object value) {
+        if (value == null) {
+            return this;
+        }
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.LK, alias, field, value);
+    }
+    
+    /**
+     * 添加EQ/IN条件, 默认添加一个NON_COMBINA_AND的条件
+     * 
+     * @param field
+     *            - 字段
+     * @param values
+     *            - 值 1个时为EQ, 多个时为 IN
+     *
+     */
+    public BaseCriteria addEqual(String field, Object... values) {
+        if (CommonUtils.isEmpty(values)) {
+            return this;
+        }
+        if (values.length == 1) {
+            return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.EQ, null, field, values);
+        }
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.IN, null, field, values);
+    }
+    
+    /**
+     * 添加EQ/IN条件, 默认添加一个NON_COMBINA_AND的条件
+     * 
+     * @param alias - 表的别名
+     * @param field
+     *            - 字段
+     * @param values
+     *            - 值 1个时为EQ, 多个时为 IN
+     *
+     */
+    public BaseCriteria addEqual(String alias, String field, Object... values) {
+        if (CommonUtils.isEmpty(values)) {
+            return this;
+        }
+        if (values.length == 1) {
+            return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.EQ, alias, field, values);
+        }
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.IN, alias, field, values);
+    }
+    
+    /**
+     * 添加查询条件, 默认添加一个NON_COMBINA_AND的条件
+     * 
+     * @param operatorType
+     *            - 操作类型
+     * @param field
+     *            - 字段
+     * @param values
+     *            - 值, between操作类型的必须为2个值, (not)in类型的为至少一个值, is(not)null类型的不需要传值
+     *
+     */
+    public BaseCriteria addCriterion(OperatorType operatorType, String field, Object... values) {
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, operatorType, null, field, values);
+    }
+    
+    /**
+     * 添加查询条件, 默认添加一个NON_COMBINA_AND的条件
+     * 
+     * @param operatorType
+     *            - 操作类型
+     * @param alias - 表的别名
+     * @param field
+     *            - 字段
+     * @param values
+     *            - 值, between操作类型的必须为2个值, (not)in类型的为至少一个值, is(not)null类型的不需要传值
+     *
+     */
+    public BaseCriteria addCriterion(OperatorType operatorType, String alias, String field, Object... values) {
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, operatorType, alias, field, values);
+    }
 
     /**
      * 添加查询条件, 对于没有组合的所有条件,必须添加一个NON_COMBINA类型的条件
@@ -194,13 +297,15 @@ public final class BaseCriteria {
      *            - 组合名,组合条件时必须传入
      * @param operatorType
      *            - 操作类型
+     * @param alias - 表的别名
      * @param field
      *            - 字段
      * @param values
      *            - 值, between操作类型的必须为2个值, (not)in类型的为至少一个值, is(not)null类型的不需要传值
      *
+     * @return 
      */
-    public void addCriterion(CombinaType combinaType, String combinaName, OperatorType operatorType, String alias, String field, Object... values) {
+    public BaseCriteria addCriterion(CombinaType combinaType, String combinaName, OperatorType operatorType, String alias, String field, Object... values) {
         // 获取或创建对象
         CondCriteria crta = createCriteria(combinaType, combinaName);
         // 创建条件
@@ -253,6 +358,20 @@ public final class BaseCriteria {
             crta.getValues().add(criterion);
         }
         condUpdated = true;
+        
+        return this;
+    }
+    
+    /**
+     * 添加一个排序
+     * 
+     * @param field
+     *            - 字段名
+     * @param type
+     *            - 排序类型
+     */
+    public BaseCriteria addSortCriterion(String field, SortType type) {
+        return addSortCriterion(0, null, field, type);
     }
 
     /**
@@ -266,8 +385,9 @@ public final class BaseCriteria {
      *            - 字段名
      * @param type
      *            - 排序类型
+     * @return
      */
-    public void addSortCriterion(int order, String alias, String field, SortType type) {
+    public BaseCriteria addSortCriterion(int order, String alias, String field, SortType type) {
         if (tempSortCriteria == null) {
             tempSortCriteria = new ArrayList<>(3);
         }
@@ -280,6 +400,8 @@ public final class BaseCriteria {
         }
         tempSortCriteria.add(sortCriterion);
         sortUpdated = true;
+        
+        return this;
     }
 
     /**
@@ -287,10 +409,11 @@ public final class BaseCriteria {
      * 
      * @param type
      * @param value
+     * @return
      */
-    public void addLimitation(LimitationType type, Integer value) {
+    public BaseCriteria addLimitation(LimitationType type, Integer value) {
         if (value == null) {
-            return;
+            return this;
         }
         switch (type) {
         case OFFSET:
@@ -304,6 +427,34 @@ public final class BaseCriteria {
             break;
         }
 
+        return this;
+    }
+    
+    /**
+     * clear all Criteria
+     * 
+     * @return
+     */
+    public BaseCriteria clear() {
+        if (!CommonUtils.isEmpty(sortCriteria)) {
+            sortCriteria.clear();
+        }
+        if (!CommonUtils.isEmpty(tempSortCriteria)) {
+            tempSortCriteria.clear();
+        }
+        if (!CommonUtils.isEmpty(combinaCriteria)) {
+            combinaCriteria.clear();
+        }
+        nonCombinaCriteria = null;
+        if (!CommonUtils.isEmpty(criteria)) {
+            criteria.clear();
+        }
+        limit = null;
+        end = null;
+        offset = 0;
+        condUpdated = true;
+        sortUpdated = true;
+        return this;
     }
 
     /**

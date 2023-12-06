@@ -636,7 +636,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         Map<String, Object> datas = new HashMap<>();
         datas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
-        datas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Mapper for" + modelClass));
+        datas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Mapper for " + modelClass));
 
         Set<String> imports = new TreeSet<>();
         datas.put(CodeConstants.IMPORTS, imports);

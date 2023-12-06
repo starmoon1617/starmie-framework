@@ -28,7 +28,7 @@ public class BaseController {
      */
     public <D> BaseDto<D> getResult(int code, String msg, D data) {
         BaseDto<D> dto = new BaseDto<>();
-        dto.setCode(0);
+        dto.setCode(code);
         dto.setMsg(msg);
         dto.setData(data);
         return dto;

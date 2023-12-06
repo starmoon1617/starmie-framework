@@ -36,6 +36,9 @@ public class ImportUtils {
         if (type.startsWith("java.lang")) {
             return;
         }
+        if ("byte[]".equals(type)) {
+            return;
+        }
         importTypes.add(type);
     }
 }
