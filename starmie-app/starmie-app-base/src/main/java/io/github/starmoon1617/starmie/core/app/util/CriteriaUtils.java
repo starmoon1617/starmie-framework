@@ -134,13 +134,14 @@ public class CriteriaUtils {
                     String combinaName = retVal[0].length() > 1 ? retVal[0].substring(1) : "";
                     // 非组合类型
                     baseCriteria.addCriterion(COMBINAS[index], combinaName, OPERATORS[Integer.valueOf(retVal[1].substring(1))],
-                            retVal.length > 3 ? retVal[3] : "", retVal[2], values);
+                            ((retVal.length > 3 ? (retVal[3] + InterpunctionConstants.DOT_STR) : "") + retVal[2]), values);
                 }
             } else if (name.startsWith(FILTER_PREFIX_SORT)) {
                 // 转换为排序
                 String[] retVal = parseSortName(name);
                 if (!CommonUtils.isEmpty(retVal)) {
-                    baseCriteria.addSortCriterion(Integer.parseInt(retVal[0]), retVal.length > 2 ? retVal[2] : "", retVal[1],
+                    baseCriteria.addSortCriterion(Integer.parseInt(retVal[0]),
+                            ((retVal.length > 2 ? (retVal[2] + InterpunctionConstants.DOT_STR) : "") + retVal[1]),
                             SORTCRITERIONS[Integer.valueOf(param.getValue()[0])]);
                 }
             } else if (name.startsWith(FILTER_PREFIX_LIMITATION)) {

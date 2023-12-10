@@ -5,6 +5,7 @@
 package io.github.starmoon1617.starmie.core.app.web;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -220,8 +221,7 @@ public class BaseGenericController<E> extends BaseController {
         String errorMsg = null;
         try {
             MultipartFile file = MultipartHttpServletRequest.class.cast(request).getFile("uploadFile");
-            List<E> datas = ExcelReader.read(file.getInputStream(), getImportHeads(request), getExcelReadHandler(),
-                    ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0], getRowReadListener());
+            List<E> datas = ExcelReader.read(file.getInputStream(), getImportHeads(request), getExcelReadHandler(), getEntityType(), getRowReadListener());
             if (CommonUtils.isEmpty(datas)) {
                 return getSuccess("Success!");
             }
@@ -237,5 +237,13 @@ public class BaseGenericController<E> extends BaseController {
             return getFailure(-1, errorMsg);
         }
         return getSuccess("Success!");
+    }
+    
+    /**
+     * To return the Type of Entity
+     * @return
+     */
+    protected Type getEntityType() {
+        return ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 }

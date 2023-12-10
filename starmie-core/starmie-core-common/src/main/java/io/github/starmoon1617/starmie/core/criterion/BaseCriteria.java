@@ -193,27 +193,10 @@ public final class BaseCriteria {
      *
      */
     public BaseCriteria addLike(String field, Object value) {
-        if (value == null) {
+        if (value == null || !CommonUtils.isNotBlank(field)) {
             return this;
         }
-        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.LK, null, field, value);
-    }
-    
-    /**
-     * 添加LK条件, 默认添加一个NON_COMBINA_AND的条件
-     * 
-     * @param alias - 表的别名
-     * @param field
-     *            - 字段
-     * @param value
-     *            - 值
-     *
-     */
-    public BaseCriteria addLike(String alias, String field, Object value) {
-        if (value == null) {
-            return this;
-        }
-        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.LK, alias, field, value);
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.LK, field, value);
     }
     
     /**
@@ -229,30 +212,7 @@ public final class BaseCriteria {
         if (CommonUtils.isEmpty(values)) {
             return this;
         }
-        if (values.length == 1) {
-            return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.EQ, null, field, values);
-        }
-        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.IN, null, field, values);
-    }
-    
-    /**
-     * 添加EQ/IN条件, 默认添加一个NON_COMBINA_AND的条件
-     * 
-     * @param alias - 表的别名
-     * @param field
-     *            - 字段
-     * @param values
-     *            - 值 1个时为EQ, 多个时为 IN
-     *
-     */
-    public BaseCriteria addEqual(String alias, String field, Object... values) {
-        if (CommonUtils.isEmpty(values)) {
-            return this;
-        }
-        if (values.length == 1) {
-            return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.EQ, alias, field, values);
-        }
-        return addCriterion(CombinaType.NON_COMBINA_AND, null, OperatorType.IN, alias, field, values);
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, (values.length == 1 ? OperatorType.EQ : OperatorType.IN), field, values);
     }
     
     /**
@@ -261,29 +221,13 @@ public final class BaseCriteria {
      * @param operatorType
      *            - 操作类型
      * @param field
-     *            - 字段
+     *            - 字段, 可通过{别名}.{字段名}方式传入别名
      * @param values
      *            - 值, between操作类型的必须为2个值, (not)in类型的为至少一个值, is(not)null类型的不需要传值
      *
      */
     public BaseCriteria addCriterion(OperatorType operatorType, String field, Object... values) {
-        return addCriterion(CombinaType.NON_COMBINA_AND, null, operatorType, null, field, values);
-    }
-    
-    /**
-     * 添加查询条件, 默认添加一个NON_COMBINA_AND的条件
-     * 
-     * @param operatorType
-     *            - 操作类型
-     * @param alias - 表的别名
-     * @param field
-     *            - 字段
-     * @param values
-     *            - 值, between操作类型的必须为2个值, (not)in类型的为至少一个值, is(not)null类型的不需要传值
-     *
-     */
-    public BaseCriteria addCriterion(OperatorType operatorType, String alias, String field, Object... values) {
-        return addCriterion(CombinaType.NON_COMBINA_AND, null, operatorType, alias, field, values);
+        return addCriterion(CombinaType.NON_COMBINA_AND, null, operatorType, field, values);
     }
 
     /**
@@ -297,23 +241,21 @@ public final class BaseCriteria {
      *            - 组合名,组合条件时必须传入
      * @param operatorType
      *            - 操作类型
-     * @param alias - 表的别名
      * @param field
-     *            - 字段
+     *            - 字段, 可通过{别名}.{字段名}方式传入别名
      * @param values
      *            - 值, between操作类型的必须为2个值, (not)in类型的为至少一个值, is(not)null类型的不需要传值
      *
      * @return 
      */
-    public BaseCriteria addCriterion(CombinaType combinaType, String combinaName, OperatorType operatorType, String alias, String field, Object... values) {
+    public BaseCriteria addCriterion(CombinaType combinaType, String combinaName, OperatorType operatorType, String field, Object... values) {
         // 获取或创建对象
         CondCriteria crta = createCriteria(combinaType, combinaName);
         // 创建条件
         CondCriterion criterion = new CondCriterion();
         criterion.setOperator(operatorType.opreator());
         criterion.setJoinType(combinaType.joinType());
-        criterion.setAlias(alias);
-        criterion.setTerm(CommonUtils.toUnderScore(field));
+        criterion.setTerm(toUnderScore(field));
         if (!CommonUtils.isEmpty(values)) {
             List<Object> list = new ArrayList<>(values.length);
             for (int i = 0; i < values.length; i++) {
@@ -366,12 +308,12 @@ public final class BaseCriteria {
      * 添加一个排序
      * 
      * @param field
-     *            - 字段名
+     *            - 字段, 可通过{别名}.{字段名}方式传入别名
      * @param type
      *            - 排序类型
      */
     public BaseCriteria addSortCriterion(String field, SortType type) {
-        return addSortCriterion(0, null, field, type);
+        return addSortCriterion(0, field, type);
     }
 
     /**
@@ -379,21 +321,18 @@ public final class BaseCriteria {
      * 
      * @param order
      *            - 排序的顺序,小的值排在前面
-     * @param alias
-     *            - 表的别名
      * @param field
-     *            - 字段名
+     *            - 字段 , 可通过{别名}.{字段名}方式传入别名
      * @param type
      *            - 排序类型
      * @return
      */
-    public BaseCriteria addSortCriterion(int order, String alias, String field, SortType type) {
+    public BaseCriteria addSortCriterion(int order, String field, SortType type) {
         if (tempSortCriteria == null) {
             tempSortCriteria = new ArrayList<>(3);
         }
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setAlias(alias);
-        sortCriterion.setTerm(CommonUtils.toUnderScore(field));
+        sortCriterion.setTerm(toUnderScore(field));
         sortCriterion.setOrder(order);
         if (type == SortType.DESC) {
             sortCriterion.setType(type.value());
@@ -479,6 +418,43 @@ public final class BaseCriteria {
             end = offset + limit;
         }
         return end;
+    }
+    
+    /**
+     * Check the term, and Camel to underscore
+     * 
+     * @param str
+     * @return
+     */
+    private String toUnderScore(String term) {
+        if (term == null) {
+            return term;
+        }
+        int length = term.length();
+        StringBuilder result = new StringBuilder(length * 2);
+        int resultLength = 0;
+        boolean wasPrevTranslated = false;
+        for (int i = 0; i < length; i++) {
+            char c = term.charAt(i);
+            if (Character.isWhitespace(c)) {
+                continue;
+            }
+            if (i > 0 || c != InterpunctionConstants.UNDER_LINE) {
+                if (Character.isUpperCase(c)) {
+                    if (!wasPrevTranslated && resultLength > 0 && result.charAt(resultLength - 1) != InterpunctionConstants.UNDER_LINE) {
+                        result.append(InterpunctionConstants.UNDER_LINE);
+                        resultLength++;
+                    }
+                    c = Character.toLowerCase(c);
+                    wasPrevTranslated = true;
+                } else {
+                    wasPrevTranslated = false;
+                }
+                result.append(c);
+                resultLength++;
+            }
+        }
+        return (resultLength > 0 ? result.toString() : term);
     }
 
     /*
