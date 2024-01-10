@@ -4,6 +4,7 @@
  */
 package io.github.starmoon1617.starmie.core.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -94,7 +95,7 @@ public class DateUtils {
      * @return
      */
     public static final Date parseDate(String dateStr) {
-        return Date.from(LocalDateTime.parse(dateStr, DATE_FORMATTER).atZone(DEFAULT_ZONEID).toInstant());
+        return Date.from(LocalDate.parse(dateStr, DATE_FORMATTER).atStartOfDay(DEFAULT_ZONEID).toInstant());
     }
 
     /**

@@ -7,6 +7,7 @@ package io.github.starmoon1617.starmie.core.app.util;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 /**
@@ -75,7 +76,7 @@ public class SessionUtils {
      * @param session
      * @param key
      */
-    public void clear(HttpSession session, String key) {
+    public static void clear(HttpSession session, String key) {
         session.removeAttribute(key);
     }
 
@@ -84,7 +85,43 @@ public class SessionUtils {
      * 
      * @param key
      */
-    public void clear(String key) {
+    public static void clear(String key) {
         RequestContextHolder.getRequestAttributes().removeAttribute(key, RequestAttributes.SCOPE_SESSION);
+    }
+    
+    /**
+     * Set Attribute to current request
+     * @param name
+     * @param object
+     */
+    public static void setAttr(String name, Object object) {
+        RequestContextHolder.getRequestAttributes().setAttribute(name, object, RequestAttributes.SCOPE_REQUEST);
+    }
+    
+    /**
+     * Get Object from request with RequestContextHolder
+     * 
+     * @param <T>
+     * @param name
+     * @param clazz
+     * @return
+     */
+    public static <T> T getAttr(String name, Class<T> clazz) {
+        Object obj = RequestContextHolder.getRequestAttributes().getAttribute(name, RequestAttributes.SCOPE_REQUEST);
+        return (obj != null ? clazz.cast(obj) : null);
+    }
+    
+    /**
+     * Get Object from request
+     * 
+     * @param <T>
+     * @param request
+     * @param name
+     * @param clazz
+     * @return
+     */
+    public static <T> T getAttr(ServletRequest request, String name, Class<T> clazz) {
+        Object obj = request.getAttribute(name);
+        return (obj != null ? clazz.cast(obj) : null);
     }
 }
