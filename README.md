@@ -4,7 +4,7 @@
 2. utils : 通用的Excel导入/导出, PDF导出工具.
 3. boot : 基于springboot, 线程池自动组装配置(autoconfiguration)类, 和启动banner设置类
 4. app : web/service相关工具类,提供通用的增/删/改/查基础定义和实现
-5. generator :  基于MyBatis Generator + 模板{Thymeleaf(已实现)/Freemarker(接口)}的 代码生成命令行工具,可实现 model/mapper/service/manager/controller/javascript等java或JS/html页面文件的自动生成.
+5. generator :  基于MyBatis Generator + 模板(Thymeleaf/Freemarker)的 代码生成命令行工具,可实现 model/mapper/service/manager/controller/javascript等java或JS/html页面文件的自动生成.
 
 后续计划 : 
 1. 增加基于 javaFX + springboot 实现的 Generator UI
