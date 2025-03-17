@@ -29,10 +29,10 @@ public class SerialVersionUIDUtils {
         value = (value ^ ((nanoTime >> 10) & 0x3FF)) << 7;
         value = (value ^ (Integer.valueOf(svuIdStr.substring(0, 3)).intValue())) << 7;
         value = (value ^ (Integer.valueOf(svuIdStr.substring(3, 5)).intValue())) << 7;
-        value = (value ^ (Integer.valueOf(svuIdStr.substring(5, 7)).intValue())) << 7;
-        value = (value ^ (Integer.valueOf(svuIdStr.substring(7, 9)).intValue())) << 7;
+        value = (value ^ (Integer.valueOf(svuIdStr.substring(5, 7)).intValue())) << 5;
+        value = (value ^ (Integer.valueOf(svuIdStr.substring(7, 9)).intValue())) << 5;
         value = (value ^ (Integer.valueOf(svuIdStr.substring(9, 11)).intValue())) << 6;
-        value = (value ^ (Integer.valueOf(svuIdStr.substring(11, 13)).intValue())) << 5;
+        value = (value ^ (Integer.valueOf(svuIdStr.substring(11, 13)).intValue())) << 7;
         value = (value ^ (Integer.valueOf(svuIdStr.substring(13)).intValue()));
         return Long.toString(value).concat("L");
     }
