@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie-app</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </parent>
     <artifactId>starmie-app-base</artifactId>
     <description>starmie app base</description>
@@ -13,12 +13,12 @@
         <dependency>
             <groupId>io.github.starmoon1617</groupId>
             <artifactId>starmie-core-base</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </dependency>
         <dependency>
             <groupId>io.github.starmoon1617</groupId>
             <artifactId>starmie-core-service</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

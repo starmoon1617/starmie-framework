@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </parent>
     <artifactId>starmie-core</artifactId>
     <packaging>pom</packaging>
