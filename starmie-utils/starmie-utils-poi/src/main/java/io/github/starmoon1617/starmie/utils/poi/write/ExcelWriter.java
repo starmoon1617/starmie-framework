@@ -13,6 +13,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.starmoon1617.starmie.utils.doc.enums.DateMode;
 import io.github.starmoon1617.starmie.utils.doc.head.DocHead;
 
 /**
@@ -31,18 +32,20 @@ public class ExcelWriter {
     
     /**
      * write data to excel
+     * 
      * @param <E>
      * @param os
      * @param sheetName
      * @param heads
      * @param es
+     * @param dateMode
      */
-    public static <E> void WriteToExcel(OutputStream os, String sheetName, List<DocHead> heads, List<E> es) {
+    public static <E> void WriteToExcel(OutputStream os, String sheetName, List<DocHead> heads, List<E> es, DateMode dateMode) {
         WorkbookUtil.validateSheetName(sheetName);
         SXSSFWorkbook wb = null;
         try {
             wb = new SXSSFWorkbook(100);
-            ExcelWriteHandler<E> ewh = new ExcelWriteHandler<>(wb, sheetName, heads);
+            ExcelWriteHandler<E> ewh = new ExcelWriteHandler<>(wb, sheetName, heads, dateMode);
             ewh.writeDatas(es);
             wb.write(os);
         } catch (RuntimeException re) {
@@ -66,14 +69,16 @@ public class ExcelWriter {
     
     /**
      * build an ExcelWriteHandler
+     * 
      * @param <E>
      * @param sheetName
      * @param heads
+     * @param dateMode
      * @return
      */
-    public static <E> ExcelWriteHandler<E> buildExcelWriteHandler(String sheetName, List<DocHead> heads) {
+    public static <E> ExcelWriteHandler<E> buildExcelWriteHandler(String sheetName, List<DocHead> heads, DateMode dateMode) {
         WorkbookUtil.validateSheetName(sheetName);
-        return new ExcelWriteHandler<>(new SXSSFWorkbook(100), sheetName, heads);
+        return new ExcelWriteHandler<>(new SXSSFWorkbook(100), sheetName, heads, dateMode);
     }
     
     /**

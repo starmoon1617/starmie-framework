@@ -13,10 +13,6 @@ import io.github.starmoon1617.starmie.core.util.EntityUtils;
  * @author Nathan Liao
  */
 public abstract class Criterion {
-    /**
-     * 数据库表别名
-     */
-    private String alias;
 
     /**
      * type
@@ -63,21 +59,6 @@ public abstract class Criterion {
      */
     void setType(String type) {
         this.type = type;
-    }
-
-    /**
-     * @return the alias
-     */
-    public String getAlias() {
-        return alias;
-    }
-
-    /**
-     * @param alias
-     *            the alias to set
-     */
-    void setAlias(String alias) {
-        this.alias = alias;
     }
     
     @Override

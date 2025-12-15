@@ -58,7 +58,9 @@ import io.github.starmoon1617.starmie.generator.core.data.FieldData;
 import io.github.starmoon1617.starmie.generator.core.data.GenericTypeData;
 import io.github.starmoon1617.starmie.generator.core.data.MethodData;
 import io.github.starmoon1617.starmie.generator.core.enums.AnnotationType;
+import io.github.starmoon1617.starmie.generator.core.extend.Counter;
 import io.github.starmoon1617.starmie.generator.core.util.CommentsUtils;
+import io.github.starmoon1617.starmie.generator.core.util.DateUtils;
 import io.github.starmoon1617.starmie.generator.core.util.ImportUtils;
 import io.github.starmoon1617.starmie.generator.core.util.StringUtils;
 import io.github.starmoon1617.starmie.generator.core.util.TypeUtils;
@@ -415,6 +417,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         setAttribute(config, CorePropertyRegistry.ANY_FILE_EXT, CorePropertyRegistry.SCRIPT + Constants.DOT + CorePropertyRegistry.ANY_FILE_EXT);
         setAttribute(config, PropertyRegistry.ANY_ENABLE_SUB_PACKAGES, CorePropertyRegistry.SCRIPT + Constants.DOT + PropertyRegistry.ANY_ENABLE_SUB_PACKAGES);
+        setAttribute(config, CorePropertyRegistry.OVER_TEMPLATE_FILE_NAME, CorePropertyRegistry.SCRIPT + Constants.DOT + CorePropertyRegistry.OVER_TEMPLATE_FILE_NAME);
     }
 
     /**
@@ -434,6 +437,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         setAttribute(config, CorePropertyRegistry.ANY_FILE_EXT, CorePropertyRegistry.TEXT + Constants.DOT + CorePropertyRegistry.ANY_FILE_EXT);
         setAttribute(config, PropertyRegistry.ANY_ENABLE_SUB_PACKAGES, CorePropertyRegistry.TEXT + Constants.DOT + PropertyRegistry.ANY_ENABLE_SUB_PACKAGES);
+        setAttribute(config, CorePropertyRegistry.OVER_TEMPLATE_FILE_NAME, CorePropertyRegistry.TEXT + Constants.DOT + CorePropertyRegistry.OVER_TEMPLATE_FILE_NAME);
     }
 
     /**
@@ -603,6 +607,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         datas.put(CodeConstants.CLASS_TYPE, CodeConstants.TYPE_CLASS);
         datas.put(CodeConstants.NAME, className);
 
+        // set Date
+        setDates(datas);
+        setCounter(datas);
+        
         answer.add(generatedJavaFiles(datas, path, templateFiles, ext, className + ".java", targetPackage,
                 context.getJavaModelGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
         return answer;
@@ -628,7 +636,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
         Map<String, Object> datas = new HashMap<>();
         datas.put(CodeConstants.FILE_COMMENT, CommentsUtils.getFileComment());
-        datas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Mapper for" + modelClass));
+        datas.put(CodeConstants.COMMENT, CommentsUtils.getTypeComment("Mapper for " + modelClass));
 
         Set<String> imports = new TreeSet<>();
         datas.put(CodeConstants.IMPORTS, imports);
@@ -661,6 +669,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         datas.put(CodeConstants.CLASS_TYPE, CodeConstants.TYPE_INTERFACE);
         datas.put(CodeConstants.NAME, mapperType.getShortNameWithoutTypeArguments());
 
+        // set Date
+        setDates(datas);
+        setCounter(datas);
+        
         answer.add(generatedJavaFiles(datas, path, templateFiles, ext, mapperType.getShortNameWithoutTypeArguments() + ".java", mapperType.getPackageName(),
                 context.getJavaClientGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
 
@@ -848,6 +860,13 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         classDatas.put(CodeConstants.FIELDS, fields);
         classDatas.put(CodeConstants.INTERFACES, interfaces);
 
+        // set Date
+        setDates(interfaceDatas);
+        setDates(classDatas);
+        
+        setCounter(interfaceDatas);
+        setCounter(classDatas);
+        
         answer.add(generatedJavaFiles(interfaceDatas, path, templateFiles, ext, serviceInterface.getShortNameWithoutTypeArguments() + ".java",
                 serviceInterface.getPackageName(), coreContext.getServiceGeneratorConfiguration().getTargetProject(),
                 context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
@@ -1039,6 +1058,13 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         classDatas.put(CodeConstants.FIELDS, fields);
         classDatas.put(CodeConstants.INTERFACES, interfaces);
 
+        // set Date
+        setDates(interfaceDatas);
+        setDates(classDatas);
+        
+        setCounter(interfaceDatas);
+        setCounter(classDatas);
+        
         answer.add(generatedJavaFiles(interfaceDatas, path, templateFiles, ext, managerInterface.getShortNameWithoutTypeArguments() + ".java",
                 managerInterface.getPackageName(), coreContext.getManagerGeneratorConfiguration().getTargetProject(),
                 context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
@@ -1221,6 +1247,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         classDatas.put(CodeConstants.IMPORTS, classImports);
         classDatas.put(CodeConstants.FIELDS, fields);
 
+        // set Date
+        setDates(classDatas);
+        setCounter(classDatas);
+        
         answer.add(generatedJavaFiles(classDatas, path, templateFiles, ext, classType.getShortNameWithoutTypeArguments() + ".java", classType.getPackageName(),
                 coreContext.getControllerGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
         return answer;
@@ -1292,6 +1322,8 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         datas.put(CodeConstants.TABLE_NAME, getFullyQualifiedTableNameAtRuntime());
         datas.put(CodeConstants.MODEL_NAME, fullyQualifiedTable.getDomainObjectName());
         datas.put(CodeConstants.MAPPING, fullyQualifiedTable.getIntrospectedTableName().toLowerCase());
+        datas.put(CodeConstants.REMARK, getRemarks());
+        datas.put(CodeConstants.SUB_PACKAGE_NAME, StringUtils.uncapitalize(fullyQualifiedTable.getDomainObjectName()));
 
         List<IntrospectedColumn> pkColumns = getPrimaryKeyColumns();
         if (pkColumns != null && !pkColumns.isEmpty()) {
@@ -1309,8 +1341,13 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             }
             datas.put(CodeConstants.COLUMNS, columns);
         }
+        
+        // set Date
+        setDates(datas);
+        setCounter(datas);
 
         boolean enableSubPackages = StringUtility.isTrue((String) getAttribute(CorePropertyRegistry.SCRIPT + Constants.DOT + PropertyRegistry.ANY_ENABLE_SUB_PACKAGES));
+        boolean overTemplateName = StringUtility.isTrue((String) getAttribute(CorePropertyRegistry.SCRIPT + Constants.DOT + CorePropertyRegistry.OVER_TEMPLATE_FILE_NAME));
         
         String tempExt = (StringUtility.stringHasValue(fileExt) ? fileExt : ext);
         List<String> tfs = StringUtils.split(templateFiles);
@@ -1318,10 +1355,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             if (!StringUtility.stringHasValue(s)) {
                 continue;
             }
-            answer.add(generatedTextFiles(datas, path, templateFiles, ext, s + "." + tempExt,
+            answer.add(generatedTextFiles(datas, path, s, ext, (overTemplateName ? fullyQualifiedTable.getDomainObjectName() : s) + "." + tempExt,
                     coreContext.getScriptGeneratorConfiguration().getTargetPackage() + File.separatorChar
                             + (enableSubPackages ? StringUtils.uncapitalize(fullyQualifiedTable.getDomainObjectName()) : ""),
                     coreContext.getScriptGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
+            overTemplateName = false;
         }
         return answer;
     }
@@ -1352,6 +1390,8 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         datas.put(CodeConstants.TABLE_NAME, getFullyQualifiedTableNameAtRuntime());
         datas.put(CodeConstants.MODEL_NAME, fullyQualifiedTable.getDomainObjectName());
         datas.put(CodeConstants.MAPPING, fullyQualifiedTable.getIntrospectedTableName().toLowerCase());
+        datas.put(CodeConstants.REMARK, getRemarks());
+        datas.put(CodeConstants.SUB_PACKAGE_NAME, StringUtils.uncapitalize(fullyQualifiedTable.getDomainObjectName()));
 
         List<IntrospectedColumn> pkColumns = getPrimaryKeyColumns();
         if (pkColumns != null && !pkColumns.isEmpty()) {
@@ -1370,7 +1410,12 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             datas.put(CodeConstants.COLUMNS, columns);
         }
         
+        // set Date
+        setDates(datas);
+        setCounter(datas);
+        
         boolean enableSubPackages = StringUtility.isTrue((String) getAttribute(CorePropertyRegistry.TEXT + Constants.DOT + PropertyRegistry.ANY_ENABLE_SUB_PACKAGES));
+        boolean overTemplateName = StringUtility.isTrue((String) getAttribute(CorePropertyRegistry.TEXT + Constants.DOT + CorePropertyRegistry.OVER_TEMPLATE_FILE_NAME));
 
         String tempExt = (StringUtility.stringHasValue(fileExt) ? fileExt : ext);
         List<String> tfs = StringUtils.split(templateFiles);
@@ -1378,10 +1423,11 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             if (!StringUtility.stringHasValue(s)) {
                 continue;
             }
-            answer.add(generatedTextFiles(datas, path, templateFiles, ext, s + "." + tempExt,
+            answer.add(generatedTextFiles(datas, path, s, ext, (overTemplateName ? fullyQualifiedTable.getDomainObjectName() : s) + "." + tempExt,
                     coreContext.getTextGeneratorConfiguration().getTargetPackage() + File.separatorChar
                             + (enableSubPackages ? StringUtils.uncapitalize(fullyQualifiedTable.getDomainObjectName()) : ""),
                     coreContext.getTextGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
+            overTemplateName = false;
         }
         return answer;
     }
@@ -1445,6 +1491,10 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
             }
             datas.put(CodeConstants.COLUMNS, columns);
         }
+        
+        // set Date
+        setDates(datas);
+        setCounter(datas);
 
         answer.add(generatedTextFiles(datas, path, templateFiles, ext, getMyBatis3XmlMapperFileName(), getMyBatis3XmlMapperPackage(),
                 context.getSqlMapGeneratorConfiguration().getTargetProject(), context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING)));
@@ -1720,6 +1770,26 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    /**
+     * set current dates to datas 
+     * 
+     * @param datas
+     */
+    protected void setDates(Map<String, Object> datas) {
+        datas.put(CodeConstants.DATE, DateUtils.getDate());
+        datas.put(CodeConstants.DATE_TIME, DateUtils.getDateTime());
+        datas.put(CodeConstants.CURRENT_DATE, DateUtils.getCurrentDate());
+    }
+    
+    /**
+     * set the counter
+     * 
+     * @param datas
+     */
+    protected void setCounter(Map<String, Object> datas) {
+        datas.put(CodeConstants.COUNTER, new Counter());
     }
 
 }

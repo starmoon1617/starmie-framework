@@ -6,9 +6,9 @@ package io.github.starmoon1617.starmie.core.app.util;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -113,7 +113,7 @@ public class CriteriaUtils {
         constructCriteria(baseCriteria, params);
         return baseCriteria;
     }
-
+    
     /**
      * 构建baseCriteria
      * 
@@ -121,32 +121,34 @@ public class CriteriaUtils {
      * @param params
      */
     private static void constructCriteria(BaseCriteria baseCriteria, Map<String, String[]> params) {
-        Set<Entry<String, String[]>> paramEntries = params.entrySet();
-
-        for (Entry<String, String[]> param : paramEntries) {
-            String name = param.getKey();
-            if (name.startsWith(FILTER_PREFIX_CRITERION)) {
-                String[] retVal = parseConditionName(name);
-                if (!CommonUtils.isEmpty(retVal)) {
-                    Object[] values = parseValues(retVal[1].substring(0, 1), param.getValue());
-                    // 组合类型
-                    int index = Integer.parseInt(retVal[0].substring(0, 1));
-                    String combinaName = retVal[0].length() > 1 ? retVal[0].substring(1) : "";
-                    // 非组合类型
-                    baseCriteria.addCriterion(COMBINAS[index], combinaName, OPERATORS[Integer.valueOf(retVal[1].substring(1))],
-                            retVal.length > 3 ? retVal[3] : "", retVal[2], values);
-                }
-            } else if (name.startsWith(FILTER_PREFIX_SORT)) {
-                // 转换为排序
-                String[] retVal = parseSortName(name);
-                if (!CommonUtils.isEmpty(retVal)) {
-                    baseCriteria.addSortCriterion(Integer.parseInt(retVal[0]), retVal.length > 2 ? retVal[2] : "", retVal[1],
-                            SORTCRITERIONS[Integer.valueOf(param.getValue()[0])]);
-                }
-            } else if (name.startsWith(FILTER_PREFIX_LIMITATION)) {
-                baseCriteria.addLimitation(LIMITATIONS[Integer.parseInt(name.substring(3))], Integer.valueOf(param.getValue()[0]));
-            }
+        for (Entry<String, String[]> param : params.entrySet()) {
+            appendCriterion(baseCriteria, param.getKey(), param.getValue());
         }
+    }
+
+    private static void appendCriterion(BaseCriteria baseCriteria, String name, String[] param) {
+        if (name.startsWith(FILTER_PREFIX_CRITERION)) {
+            String[] retVal = parseConditionName(name);
+            if (!CommonUtils.isEmpty(retVal)) {
+                Object[] values = parseValues(retVal[1].substring(0, 1), param);
+                // 组合类型
+                int index = Integer.parseInt(retVal[0].substring(0, 1));
+                String combinaName = retVal[0].length() > 1 ? retVal[0].substring(1) : "";
+                // 非组合类型
+                baseCriteria.addCriterion(COMBINAS[index], combinaName, OPERATORS[Integer.valueOf(retVal[1].substring(1))],
+                        ((retVal.length > 3 ? (retVal[3] + InterpunctionConstants.DOT_STR) : "") + retVal[2]), values);
+            }
+        } else if (name.startsWith(FILTER_PREFIX_SORT)) {
+            // 转换为排序
+            String[] retVal = parseSortName(name);
+            if (!CommonUtils.isEmpty(retVal)) {
+                baseCriteria.addSortCriterion(Integer.parseInt(retVal[0]),
+                        ((retVal.length > 2 ? (retVal[2] + InterpunctionConstants.DOT_STR) : "") + retVal[1]), SORTCRITERIONS[Integer.valueOf(param[0])]);
+            }
+        } else if (name.startsWith(FILTER_PREFIX_LIMITATION)) {
+            baseCriteria.addLimitation(LIMITATIONS[Integer.parseInt(name.substring(3))], Integer.valueOf(param[0]));
+        }
+
     }
 
     /**
@@ -168,7 +170,7 @@ public class CriteriaUtils {
     private static String[] parseSortName(String name) {
         return CommonUtils.split(name.substring(3), InterpunctionConstants.UNDER_LINE_STR);
     }
-
+    
     /**
      * 解析出对应类型的值
      * 
@@ -215,6 +217,29 @@ public class CriteriaUtils {
             }
         }
         return retVal;
+    }
+    
+    /**
+     * 从params中获取参数,并组装成BaseCriteria
+     * 
+     * @param params
+     * @return
+     */
+    public static final BaseCriteria getCriteria(Map<String, List<String>> params) {
+        BaseCriteria baseCriteria = BaseCriteria.getInstance();
+        if (CommonUtils.isEmpty(params)) {
+            // 没有参数,直接返回结果
+            return baseCriteria;
+        }
+        for (Entry<String, List<String>> param : params.entrySet()) {
+            List<String> vs = param.getValue();
+            if (CommonUtils.isEmpty(vs)) {
+                continue;
+            }
+            String[] values = vs.toArray(new String[vs.size()]);
+            appendCriterion(baseCriteria, param.getKey(), values);
+        }
+        return baseCriteria;
     }
 
 }

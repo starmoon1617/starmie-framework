@@ -5,6 +5,7 @@
 package io.github.starmoon1617.starmie.core.app.web;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import io.github.starmoon1617.starmie.core.criterion.BaseCriteria;
 import io.github.starmoon1617.starmie.core.criterion.enums.LimitationType;
 import io.github.starmoon1617.starmie.core.util.CommonUtils;
 import io.github.starmoon1617.starmie.core.util.EntityUtils;
+import io.github.starmoon1617.starmie.utils.doc.enums.DateMode;
 import io.github.starmoon1617.starmie.utils.doc.head.DocHead;
 import io.github.starmoon1617.starmie.utils.poi.read.ExcelReadHandler;
 import io.github.starmoon1617.starmie.utils.poi.read.ExcelReader;
@@ -106,6 +108,14 @@ public class BaseGenericController<E> extends BaseController {
         addConverters(docHeads);
         return docHeads;
     }
+    
+    /**
+     * get Date mode for excel export, default Date time mode
+     * @return
+     */
+    protected DateMode getDateMode() {
+        return DateMode.DATETIME;
+    }
 
     /**
      * export
@@ -118,7 +128,7 @@ public class BaseGenericController<E> extends BaseController {
     public void doExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String fileName = request.getParameter("fileName");
-        if (CommonUtils.isNotBlank(fileName)) {
+        if (!CommonUtils.isNotBlank(fileName)) {
             fileName = "export_datas";
         }
 
@@ -131,7 +141,7 @@ public class BaseGenericController<E> extends BaseController {
             }
             int pageSize = baseCriteria.getLimit();
 
-            handler = ExcelWriter.buildExcelWriteHandler(fileName, getExportHeads(request));
+            handler = ExcelWriter.buildExcelWriteHandler(fileName, getExportHeads(request), getDateMode());
 
             int total = count(baseCriteria);
             if (total <= 0) {
@@ -211,8 +221,7 @@ public class BaseGenericController<E> extends BaseController {
         String errorMsg = null;
         try {
             MultipartFile file = MultipartHttpServletRequest.class.cast(request).getFile("uploadFile");
-            List<E> datas = ExcelReader.read(file.getInputStream(), getImportHeads(request), getExcelReadHandler(),
-                    ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0], getRowReadListener());
+            List<E> datas = ExcelReader.read(file.getInputStream(), getImportHeads(request), getExcelReadHandler(), getEntityType(), getRowReadListener());
             if (CommonUtils.isEmpty(datas)) {
                 return getSuccess("Success!");
             }
@@ -228,5 +237,13 @@ public class BaseGenericController<E> extends BaseController {
             return getFailure(-1, errorMsg);
         }
         return getSuccess("Success!");
+    }
+    
+    /**
+     * To return the Type of Entity
+     * @return
+     */
+    protected Type getEntityType() {
+        return ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 }

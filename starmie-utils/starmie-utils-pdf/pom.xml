@@ -3,7 +3,7 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie-utils</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.4</version>
     </parent>
     <artifactId>starmie-utils-pdf</artifactId>
     <description>starmie pdf utils</description>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>io.github.starmoon1617</groupId>
             <artifactId>starmie-utils-doc</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>

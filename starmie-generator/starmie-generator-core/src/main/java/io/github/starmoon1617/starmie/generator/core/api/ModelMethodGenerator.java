@@ -86,7 +86,7 @@ public class ModelMethodGenerator extends AbstractDataGenerator implements Metho
         getterData.setImplementations(getterImpl);
 
         sb.setLength(0);
-        sb.append("this. ").append(column.getJavaProperty()).append(" = ").append(column.getJavaProperty()).append(Constants.SEMICOLON);
+        sb.append("this.").append(column.getJavaProperty()).append(" = ").append(column.getJavaProperty()).append(Constants.SEMICOLON);
         List<String> setterImpl = new ArrayList<>();
         setterImpl.add(sb.toString());
         setterData.setImplementations(setterImpl);

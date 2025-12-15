@@ -244,5 +244,26 @@ public class InterpunctionConstants {
      * 大于 >
      */
     public static final String GREATER_THAN_STR = ">";
+    
+    
+    /**
+     * 波浪号 ~
+     */
+    public static final char TILDE = '~';
+
+    /**
+     * 波浪号 ~
+     */
+    public static final String TILDE_STR = "~";
+    
+    /**
+     * 竖线 |
+     */
+    public static final char VERTICAL_LINE = '|';
+
+    /**
+     * 竖线 |
+     */
+    public static final String VERTICAL_LINE_STR = "|";
 
 }
