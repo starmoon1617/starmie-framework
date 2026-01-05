@@ -4,10 +4,11 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie</artifactId>
-        <version>0.0.4</version>
+        <version>2.0.0</version>
     </parent>
     <artifactId>starmie-generator</artifactId>
     <packaging>pom</packaging>
+    <name>starmie-generator</name>
     <description>starmie generator</description>
 
     <modules>

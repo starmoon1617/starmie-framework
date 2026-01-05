@@ -4,9 +4,10 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie-boot</artifactId>
-        <version>0.0.4</version>
+        <version>2.0.0</version>
     </parent>
     <artifactId>starmie-boot-banner</artifactId>
+    <name>starmie-boot-banner</name>
     <description>starmie framework banner configuration</description>
 
     <dependencies>

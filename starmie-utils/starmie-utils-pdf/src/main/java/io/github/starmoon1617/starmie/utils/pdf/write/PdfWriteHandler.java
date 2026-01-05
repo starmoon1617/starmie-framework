@@ -285,23 +285,14 @@ public class PdfWriteHandler<E> {
             }
         }
         // 按数据类型写入cell
-        if (value instanceof String) {
-            return String.class.cast(value);
-        }
-        if (value instanceof Date) {
-            return DateUtils.format(TimeConstants.DATE_TIME_FORMAT, Date.class.cast(value));
-        }
-        if (value instanceof Calendar) {
-            return DateUtils.format(TimeConstants.DATE_TIME_FORMAT, Calendar.class.cast(value).getTime());
-        }
-        if (value instanceof LocalDate) {
-            return LocalDate.class.cast(value).format(DateUtils.DATE_TIME_FORMATTER);
-        }
-        if (value instanceof LocalDateTime) {
-            return LocalDateTime.class.cast(value).format(DateUtils.DATE_TIME_FORMATTER);
-        }
-        // 默认为String
-        return value.toString();
+        return switch (value) {
+        case String s -> s;
+        case Date d -> DateUtils.format(TimeConstants.DATE_TIME_FORMAT, d);
+        case Calendar c -> DateUtils.format(TimeConstants.DATE_TIME_FORMAT, c.getTime());
+        case LocalDate ld -> ld.format(DateUtils.DATE_TIME_FORMATTER);
+        case LocalDateTime ldt -> ldt.format(DateUtils.DATE_TIME_FORMATTER);
+        default -> value.toString();
+        };
     }
 
     /**
@@ -438,11 +429,11 @@ public class PdfWriteHandler<E> {
     float convertRowData(E data, final List<String> textDatas, final Map<Integer, List<String>> multiLineMap) {
         List<?> lData = null;
         Map<?, ?> mData = null;
-        if (data instanceof List<?>) {
-            lData = (List<?>) data;
-        } else if (data instanceof Map<?, ?>) {
+        if (data instanceof List<?> list) {
+            lData = list;
+        } else if (data instanceof Map<?, ?> map) {
             // map处理
-            mData = (Map<?, ?>) data;
+            mData = map;
         }
         PdfFonts pdfFonts = pageConf.getFonts();
         PDFont font = pdfFonts.getTextFont();

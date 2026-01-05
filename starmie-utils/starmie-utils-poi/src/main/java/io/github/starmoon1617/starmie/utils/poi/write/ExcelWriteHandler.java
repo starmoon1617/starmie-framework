@@ -186,10 +186,10 @@ public class ExcelWriteHandler<E> {
      * @param e
      */
     void writeRowData(Row row, E e) {
-        if (e instanceof List<?>) {
-            writeListData(row, (List<?>) e);
-        } else if (e instanceof Map<?, ?>) {
-            writeMapData(row, (Map<?, ?>) e);
+        if (e instanceof List<?> list) {
+            writeListData(row, list);
+        } else if (e instanceof Map<?, ?> map) {
+            writeMapData(row, map);
         } else {
             writeObjectData(row, e);
         }
@@ -264,64 +264,43 @@ public class ExcelWriteHandler<E> {
                 return;
             }
         }
-        if (value instanceof String) {
-            cell.setCellValue(String.class.cast(value));
-            return;
-        }
-        if (value instanceof Integer) {
-            cell.setCellValue(Double.valueOf(value.toString()));
-            return;
-        }
-        if (value instanceof Long) {
-            cell.setCellValue(value.toString());
-            return;
-        }
-        if (value instanceof Boolean) {
-            cell.setCellValue(Boolean.class.cast(value));
-            return;
-        }
-        if (value instanceof Date) {
+        switch (value) {
+        case String s -> cell.setCellValue(s);
+        case Integer i -> cell.setCellValue(Double.valueOf(i.toString()));
+        case Long l -> cell.setCellValue(l.toString());
+        case Boolean b -> cell.setCellValue(b);
+        case Date d -> {
             if (formatter != null) {
-                cell.setCellValue(LocalDateTime.ofInstant(Date.class.cast(value).toInstant(), ZoneId.systemDefault()).format(formatter));
+                cell.setCellValue(LocalDateTime.ofInstant(d.toInstant(), ZoneId.systemDefault()).format(formatter));
             } else {
-                cell.setCellValue(Date.class.cast(value));
+                cell.setCellValue(d);
             }
-            return;
         }
-        if (value instanceof Double) {
-            cell.setCellValue(Double.class.cast(value));
-            return;
-        }
-        if (value instanceof BigDecimal) {
-            cell.setCellValue(BigDecimal.class.cast(value).doubleValue());
-            return;
-        }
-        if (value instanceof LocalDate) {
+        case Double d -> cell.setCellValue(d);
+        case BigDecimal bd -> cell.setCellValue(bd.doubleValue());
+        case LocalDate ld -> {
             if (formatter != null) {
-                cell.setCellValue(LocalDate.class.cast(value).format(formatter));
+                cell.setCellValue(ld.format(formatter));
             } else {
-                cell.setCellValue(LocalDate.class.cast(value));
+                cell.setCellValue(ld);
             }
-            return;
         }
-        if (value instanceof LocalDateTime) {
+        case LocalDateTime ldt -> {
             if (formatter != null) {
-                cell.setCellValue(LocalDateTime.class.cast(value).format(formatter));
+                cell.setCellValue(ldt.format(formatter));
             } else {
-                cell.setCellValue(LocalDateTime.class.cast(value));
+                cell.setCellValue(ldt);
             }
-            return;
         }
-        if (value instanceof Calendar) {
+        case Calendar c -> {
             if (formatter != null) {
-                cell.setCellValue(LocalDateTime.ofInstant(Calendar.class.cast(value).toInstant(), ZoneId.systemDefault()).format(formatter));
+                cell.setCellValue(LocalDateTime.ofInstant(c.toInstant(), ZoneId.systemDefault()).format(formatter));
             } else {
-                cell.setCellValue(Calendar.class.cast(value));
+                cell.setCellValue(c);
             }
-            return;
         }
-        // default write as String
-        cell.setCellValue(value.toString());
+        default -> cell.setCellValue(value.toString());
+        }
     }
 
 }

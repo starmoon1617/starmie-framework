@@ -4,9 +4,10 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie-generator</artifactId>
-        <version>0.0.4</version>
+        <version>2.0.0</version>
     </parent>
     <artifactId>starmie-generator-core</artifactId>
+    <name>starmie-generator-core</name>
     <description>starmie generator core, extend for mybatis generator </description>
 
     <dependencies>

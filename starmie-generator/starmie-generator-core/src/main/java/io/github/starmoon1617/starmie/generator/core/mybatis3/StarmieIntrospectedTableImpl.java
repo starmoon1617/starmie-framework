@@ -240,10 +240,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
      * 计算Service配置属性
      */
     protected void calculateAttributes() {
-        if (!(context instanceof CoreContext)) {
+        if (!(context instanceof CoreContext coreContext)) {
             return;
         }
-        CoreContext coreContext = CoreContext.class.cast(context);
         // service
         calcServiceAttributes(coreContext);
         // manager
@@ -462,8 +461,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
 
     @Override
     public void calculateGenerators(List<String> warnings, ProgressCallback progressCallback) {
-        if (context instanceof CoreContext) {
-            CoreContext coreContext = CoreContext.class.cast(context);
+        if (context instanceof CoreContext coreContext) {
             // service
             calculateGenerators(javaGenerators, coreContext.getServiceGeneratorConfiguration(), warnings, progressCallback);
             // manager
@@ -687,10 +685,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     @SuppressWarnings("unchecked")
     protected List<GeneratedJavaFile> getGeneratedServiceFiles(Map<String, Object> attrs) {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-        if (!(context instanceof CoreContext)) {
+        if (!(context instanceof CoreContext coreContext)) {
             return answer;
         }
-        CoreContext coreContext = CoreContext.class.cast(context);
 
         String path = (String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
         String templateFiles = (String) getAttribute(CorePropertyRegistry.SERVICE + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
@@ -883,10 +880,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     @SuppressWarnings("unchecked")
     protected List<GeneratedJavaFile> getGeneratedManagerFiles(Map<String, Object> attrs) {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-        if (!(context instanceof CoreContext)) {
+        if (!(context instanceof CoreContext coreContext)) {
             return answer;
         }
-        CoreContext coreContext = CoreContext.class.cast(context);
 
         String path = (String) getAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
         String templateFiles = (String) getAttribute(CorePropertyRegistry.MANAGER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
@@ -1081,10 +1077,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     @SuppressWarnings("unchecked")
     protected List<GeneratedJavaFile> getGeneratedControllerFiles(Map<String, Object> attrs) {
         List<GeneratedJavaFile> answer = new ArrayList<>();
-        if (!(context instanceof CoreContext)) {
+        if (!(context instanceof CoreContext coreContext)) {
             return answer;
         }
-        CoreContext coreContext = CoreContext.class.cast(context);
 
         String path = (String) getAttribute(CorePropertyRegistry.CONTROLLER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
         String templateFiles = (String) getAttribute(CorePropertyRegistry.CONTROLLER + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
@@ -1303,10 +1298,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
      */
     protected List<GeneratedXmlFile> getGeneratedScriptFiles() {
         List<GeneratedXmlFile> answer = new ArrayList<>();
-        if (!(context instanceof CoreContext)) {
+        if (!(context instanceof CoreContext coreContext)) {
             return answer;
         }
-        CoreContext coreContext = CoreContext.class.cast(context);
 
         String path = (String) getAttribute(CorePropertyRegistry.SCRIPT + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
         String templateFiles = (String) getAttribute(CorePropertyRegistry.SCRIPT + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
@@ -1371,10 +1365,9 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
     protected List<GeneratedXmlFile> getGeneratedTextFiles() {
 
         List<GeneratedXmlFile> answer = new ArrayList<>();
-        if (!(context instanceof CoreContext)) {
+        if (!(context instanceof CoreContext coreContext)) {
             return answer;
         }
-        CoreContext coreContext = CoreContext.class.cast(context);
 
         String path = (String) getAttribute(CorePropertyRegistry.TEXT + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_PATH);
         String templateFiles = (String) getAttribute(CorePropertyRegistry.TEXT + Constants.DOT + CorePropertyRegistry.ANY_TEMPLATE_FILES);
@@ -1582,8 +1575,7 @@ public class StarmieIntrospectedTableImpl extends IntrospectedTableMyBatis3Impl 
                 boolean added = false;
                 if (types != null && types.length > 0) {
                     for (Type type : types) {
-                        if (type instanceof ParameterizedType) {
-                            ParameterizedType pt = ParameterizedType.class.cast(type);
+                        if (type instanceof ParameterizedType pt) {
                             if (pt.getRawType().getTypeName().equals(baseModelClass)) {
                                 sb.append(modelType.getShortNameWithoutTypeArguments()).append(Constants.COMMA_SPACE);
                                 added = true;

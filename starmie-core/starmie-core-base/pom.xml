@@ -3,8 +3,9 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie-core</artifactId>
-        <version>0.0.4</version>
+        <version>2.0.0</version>
     </parent>
     <artifactId>starmie-core-base</artifactId>
+    <name>starmie-core-base</name>
     <description>starmie core base</description>
 </project>

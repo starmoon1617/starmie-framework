@@ -3,16 +3,17 @@
     <parent>
         <groupId>io.github.starmoon1617</groupId>
         <artifactId>starmie-utils</artifactId>
-        <version>0.0.4</version>
+        <version>2.0.0</version>
     </parent>
     <artifactId>starmie-utils-poi</artifactId>
+    <name>starmie-utils-poi</name>
     <description>starmie poi utils</description>
     
     <dependencies>
         <dependency>
             <groupId>io.github.starmoon1617</groupId>
             <artifactId>starmie-utils-doc</artifactId>
-            <version>0.0.4</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>

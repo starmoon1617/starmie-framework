@@ -6,9 +6,9 @@
         <artifactId>starmie-boot</artifactId>
         <version>2.0.0</version>
     </parent>
-    <artifactId>starmie-boot-executor</artifactId>
-    <name>starmie-boot-executor</name>
-    <description>starmie framework executor configuration</description>
+    <artifactId>starmie-boot-executor-vt</artifactId>
+    <name>starmie-boot-executor-vt</name>
+    <description>starmie framework Virtual Thread executor configuration</description>
 
     <dependencies>
         <dependency>

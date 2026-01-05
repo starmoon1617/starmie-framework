@@ -165,20 +165,21 @@ public final class BaseCriteria {
      */
     private String processLikeValue(OperatorType type, String value) {
         StringBuilder sb = new StringBuilder(value);
-        if (type == OperatorType.LK) {
+        switch (type) {
+        case LK -> {
             sb.insert(0, InterpunctionConstants.PERCENT);
             sb.append(InterpunctionConstants.PERCENT);
-        } else if (type == OperatorType.RLKM) {
-            sb.append(InterpunctionConstants.PERCENT);
-        } else if (type == OperatorType.LLKM) {
-            sb.insert(0, InterpunctionConstants.PERCENT);
-        } else if (type == OperatorType.SLKO) {
+        }
+        case RLKM -> sb.append(InterpunctionConstants.PERCENT);
+        case LLKM -> sb.insert(0, InterpunctionConstants.PERCENT);
+        case SLKO -> {
             sb.insert(0, InterpunctionConstants.UNDER_LINE);
             sb.append(InterpunctionConstants.UNDER_LINE);
-        } else if (type == OperatorType.RLKO) {
-            sb.append(InterpunctionConstants.UNDER_LINE);
-        } else if (type == OperatorType.LLKO) {
-            sb.insert(0, InterpunctionConstants.UNDER_LINE);
+        }
+        case RLKO -> sb.append(InterpunctionConstants.UNDER_LINE);
+        case LLKO -> sb.insert(0, InterpunctionConstants.UNDER_LINE);
+        default -> {
+        }
         }
         return sb.toString();
     }
@@ -269,26 +270,12 @@ public final class BaseCriteria {
             criterion.setValues(list);
         }
         // 设置type
-        switch (operatorType) {
-        case IN:
-            criterion.setType(CriterionConstants.TYPE_MULTI);
-            break;
-        case NIN:
-            criterion.setType(CriterionConstants.TYPE_MULTI);
-            break;
-        case BTW:
-            criterion.setType(CriterionConstants.TYPE_DUAL);
-            break;
-        case ISN:
-            criterion.setType(CriterionConstants.TYPE_NONE);
-            break;
-        case ISNN:
-            criterion.setType(CriterionConstants.TYPE_NONE);
-            break;
-        default:
-            criterion.setType(CriterionConstants.TYPE_SINGLE);
-            break;
-        }
+        criterion.setType(switch (operatorType) {
+        case IN, NIN -> CriterionConstants.TYPE_MULTI;
+        case BTW -> CriterionConstants.TYPE_DUAL;
+        case ISN, ISNN -> CriterionConstants.TYPE_NONE;
+        default -> CriterionConstants.TYPE_SINGLE;
+        });
         // 填充条件
         if (CommonUtils.isEmpty(crta.getValues())) {
             crta.setValues(new ArrayList<Object>());
@@ -355,15 +342,9 @@ public final class BaseCriteria {
             return this;
         }
         switch (type) {
-        case OFFSET:
-            offset = value;
-            break;
-        case LIMIT:
-            limit = value;
-            break;
-        case END:
-            end = value;
-            break;
+        case OFFSET -> offset = value;
+        case LIMIT -> limit = value;
+        case END -> end = value;
         }
 
         return this;
