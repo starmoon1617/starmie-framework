@@ -254,14 +254,17 @@ public final class BaseCriteria {
         CondCriteria crta = createCriteria(combinaType, combinaName);
         // 创建条件
         CondCriterion criterion = new CondCriterion();
-        criterion.setOperator(operatorType.opreator());
+        criterion.setOperator(operatorType.operator());
         criterion.setJoinType(combinaType.joinType());
         criterion.setTerm(toUnderScore(field));
         if (!CommonUtils.isEmpty(values)) {
             List<Object> list = new ArrayList<>(values.length);
             for (int i = 0; i < values.length; i++) {
+                if (values[i] == null) {
+                    continue;
+                }
                 // like类型设置
-                if (CriterionConstants.OPER_LIKE.equals(operatorType.opreator())) {
+                if (CriterionConstants.OPER_LIKE.equals(operatorType.operator())) {
                     list.add(processLikeValue(operatorType, values[i].toString()));
                 } else {
                     list.add(values[i]);
@@ -315,15 +318,16 @@ public final class BaseCriteria {
      * @return
      */
     public BaseCriteria addSortCriterion(int order, String field, SortType type) {
+        if (!CommonUtils.isNotBlank(field)) {
+            return this;
+        }
         if (tempSortCriteria == null) {
             tempSortCriteria = new ArrayList<>(3);
         }
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setTerm(toUnderScore(field));
         sortCriterion.setOrder(order);
-        if (type == SortType.DESC) {
-            sortCriterion.setType(type.value());
-        }
+        sortCriterion.setType(type == null ? SortType.ASC.value() : type.value());
         tempSortCriteria.add(sortCriterion);
         sortUpdated = true;
         
@@ -338,7 +342,7 @@ public final class BaseCriteria {
      * @return
      */
     public BaseCriteria addLimitation(LimitationType type, Integer value) {
-        if (value == null) {
+        if (value == null || value < 0) {
             return this;
         }
         switch (type) {
@@ -371,7 +375,7 @@ public final class BaseCriteria {
         }
         limit = null;
         end = null;
-        offset = 0;
+        offset = CriterionConstants.OFFSET;
         condUpdated = true;
         sortUpdated = true;
         return this;
@@ -395,10 +399,13 @@ public final class BaseCriteria {
      * @return the end
      */
     public Integer getEnd() {
-        if (end == null && limit != null) {
-            end = offset + limit;
+        if (end != null) {
+            return end;
         }
-        return end;
+        if (limit != null) {
+            return offset + limit;
+        }
+        return null;
     }
     
     /**

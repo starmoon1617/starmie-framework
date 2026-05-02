@@ -12,9 +12,9 @@ package io.github.starmoon1617.starmie.core.criterion.enums;
  */
 public enum SortType {
     /**
-     * 升序
+     * 升序, 默认空串
      */
-    ASC("ASC", "A"),
+    ASC("", "A"),
     /**
      * 降序
      */

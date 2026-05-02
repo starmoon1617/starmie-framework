@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.starmoon1617</groupId>
     <artifactId>starmie</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <packaging>pom</packaging>
     <description>starmie framework</description>
     <name>starmie</name>
@@ -29,8 +29,8 @@
         <gpg.plugin.version>3.2.8</gpg.plugin.version>
         <publish.plugin.version>0.9.0</publish.plugin.version>
         <!-- spring boot -->
-        <spring.boot.version>4.0.0</spring.boot.version>
-        <spring.version>7.0.2</spring.version>
+        <spring.boot.version>4.0.3</spring.boot.version>
+        <spring.version>7.0.5</spring.version>
         <!-- logger -->
         <slf4j.version>2.0.17</slf4j.version>
         <logback.version>1.5.22</logback.version>
@@ -205,9 +205,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <keyname>EC90019B894A6E3288A75A52A7A5CFE2F22D7174</keyname>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.central</groupId>

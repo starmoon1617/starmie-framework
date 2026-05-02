@@ -18,6 +18,11 @@ public class Pagination<T> implements Serializable {
     private static final long serialVersionUID = 6720759642759607955L;
 
     /**
+     * if return total count
+     */
+    private boolean returnTotal;
+
+    /**
      * total count
      */
     private int total;
@@ -48,6 +53,20 @@ public class Pagination<T> implements Serializable {
     private List<T> elms;
 
     /**
+     * @return
+     */
+    public boolean isReturnTotal() {
+        return returnTotal;
+    }
+
+    /**
+     * @param returnTotal
+     */
+    public void setReturnTotal(boolean returnTotal) {
+        this.returnTotal = returnTotal;
+    }
+
+    /**
      * @return the total
      */
     public int getTotal() {
@@ -55,8 +74,7 @@ public class Pagination<T> implements Serializable {
     }
 
     /**
-     * @param total
-     *            the total to set
+     * @param total the total to set
      */
     public void setTotal(int total) {
         this.total = total;
@@ -70,8 +88,7 @@ public class Pagination<T> implements Serializable {
     }
 
     /**
-     * @param totalPage
-     *            the totalPage to set
+     * @param totalPage the totalPage to set
      */
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
@@ -85,8 +102,7 @@ public class Pagination<T> implements Serializable {
     }
 
     /**
-     * @param pageSize
-     *            the pageSize to set
+     * @param pageSize the pageSize to set
      */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
@@ -100,8 +116,7 @@ public class Pagination<T> implements Serializable {
     }
 
     /**
-     * @param pageNo
-     *            the pageNo to set
+     * @param pageNo the pageNo to set
      */
     public void setPageNo(int pageNo) {
         this.pageNo = pageNo;
@@ -115,8 +130,7 @@ public class Pagination<T> implements Serializable {
     }
 
     /**
-     * @param size
-     *            the size to set
+     * @param size the size to set
      */
     public void setSize(int size) {
         this.size = size;
@@ -130,8 +144,7 @@ public class Pagination<T> implements Serializable {
     }
 
     /**
-     * @param elms
-     *            the elms to set
+     * @param elms the elms to set
      */
     public void setElms(List<T> elms) {
         this.elms = elms;

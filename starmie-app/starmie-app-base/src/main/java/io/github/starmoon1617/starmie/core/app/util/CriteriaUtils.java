@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -94,7 +95,11 @@ public class CriteriaUtils {
      * @return
      */
     public static BaseCriteria getCriteria() {
-        return getCriteria(ServletRequestAttributes.class.cast(RequestContextHolder.getRequestAttributes()).getRequest());
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        if (attrs == null) {
+            return BaseCriteria.getInstance();
+        }
+        return getCriteria(((ServletRequestAttributes) attrs).getRequest());
     }
 
     /**
@@ -127,32 +132,58 @@ public class CriteriaUtils {
     }
 
     private static void appendCriterion(BaseCriteria baseCriteria, String name, String[] param) {
-        if (name.startsWith(FILTER_PREFIX_CRITERION)) {
-            String[] retVal = parseConditionName(name);
-            if (!CommonUtils.isEmpty(retVal)) {
-                Object[] values = parseValues(retVal[1].substring(0, 1), param);
-                // 组合类型
-                int index = Integer.parseInt(retVal[0].substring(0, 1));
-                String combinaName = retVal[0].length() > 1 ? retVal[0].substring(1) : "";
-                // 非组合类型
-                baseCriteria.addCriterion(COMBINAS[index], combinaName, OPERATORS[Integer.valueOf(retVal[1].substring(1))],
-                        ((retVal.length > 3 ? (retVal[3] + InterpunctionConstants.DOT_STR) : "") + retVal[2]), values);
+        try {
+            if (name.startsWith(FILTER_PREFIX_CRITERION)) {
+                String[] retVal = parseConditionName(name);
+                // 检查数组长度至少为3
+                if (!CommonUtils.isEmpty(retVal) && retVal.length >= 3 
+                        && retVal[0] != null && retVal[0].length() >= 1 
+                        && retVal[1] != null && retVal[1].length() >= 2) {
+                    Object[] values = parseValues(retVal[1].substring(0, 1), param);
+                    // 组合类型
+                    int index = Integer.parseInt(retVal[0].substring(0, 1));
+                    // 数组边界检查
+                    if (index < 0 || index >= COMBINAS.length) {
+                        return;
+                    }
+                    int operatorIndex = Integer.parseInt(retVal[1].substring(1));
+                    if (operatorIndex < 0 || operatorIndex >= OPERATORS.length) {
+                        return;
+                    }
+                    String combinaName = retVal[0].length() > 1 ? retVal[0].substring(1) : "";
+                    // 非组合类型
+                    baseCriteria.addCriterion(COMBINAS[index], combinaName, OPERATORS[operatorIndex],
+                            ((retVal.length > 3 ? (retVal[3] + InterpunctionConstants.DOT_STR) : "") + retVal[2]), values);
+                }
+            } else if (name.startsWith(FILTER_PREFIX_SORT)) {
+                // 转换为排序
+                String[] retVal = parseSortName(name);
+                if (!CommonUtils.isEmpty(retVal) && retVal.length >= 2 && !CommonUtils.isEmpty(param)) {
+                    int sortIndex = Integer.parseInt(param[0]);
+                    // 数组边界检查
+                    if (sortIndex < 0 || sortIndex >= SORTCRITERIONS.length) {
+                        return;
+                    }
+                    baseCriteria.addSortCriterion(Integer.parseInt(retVal[0]),
+                            ((retVal.length > 2 ? (retVal[2] + InterpunctionConstants.DOT_STR) : "") + retVal[1]), SORTCRITERIONS[sortIndex]);
+                }
+            } else if (name.startsWith(FILTER_PREFIX_LIMITATION)) {
+                int limitIndex = Integer.parseInt(name.substring(3));
+                // 数组边界检查
+                if (limitIndex < 0 || limitIndex >= LIMITATIONS.length) {
+                    return;
+                }
+                if (!CommonUtils.isEmpty(param)) {
+                    baseCriteria.addLimitation(LIMITATIONS[limitIndex], Integer.valueOf(param[0]));
+                }
             }
-        } else if (name.startsWith(FILTER_PREFIX_SORT)) {
-            // 转换为排序
-            String[] retVal = parseSortName(name);
-            if (!CommonUtils.isEmpty(retVal)) {
-                baseCriteria.addSortCriterion(Integer.parseInt(retVal[0]),
-                        ((retVal.length > 2 ? (retVal[2] + InterpunctionConstants.DOT_STR) : "") + retVal[1]), SORTCRITERIONS[Integer.valueOf(param[0])]);
-            }
-        } else if (name.startsWith(FILTER_PREFIX_LIMITATION)) {
-            baseCriteria.addLimitation(LIMITATIONS[Integer.parseInt(name.substring(3))], Integer.valueOf(param[0]));
+        } catch (NumberFormatException e) {
+            // 忽略无效的参数格式
         }
-
     }
 
     /**
-     * 解析查询条件, _FC{数据类型}{操作符类型}_{字段名}_{表别名}解析成数组[{数据类型}{操作符类型},{字段名},{表别名}]
+     * 解析查询条件, _FC{组合类型}{组合名}_{数据类型}{操作符类型}_{字段名}_{表别名}解析成数组[{组合类型}{组合名},{数据类型}{操作符类型},{字段名},{表别名}]
      * 
      * @param name
      * @return
@@ -183,38 +214,46 @@ public class CriteriaUtils {
             return null;
         }
         Object[] retVal = null;
-        if (ParamType.STRING.type().equals(type)) {
+        try {
+            if (ParamType.STRING.type().equals(type)) {
+                retVal = values;
+            } else if (ParamType.INT.type().equals(type)) {
+                retVal = new Integer[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    retVal[i] = Integer.valueOf(values[i]);
+                }
+            } else if (ParamType.LONG.type().equals(type)) {
+                retVal = new Long[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    retVal[i] = Long.valueOf(values[i]);
+                }
+            } else if (ParamType.DATE.type().equals(type)) {
+                retVal = new Date[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    retVal[i] = DateUtils.parseDate(values[i]);
+                }
+            } else if (ParamType.DATETIME.type().equals(type)) {
+                retVal = new Date[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    retVal[i] = DateUtils.parseDateTime(values[i]);
+                }
+            } else if (ParamType.BIGDECIMAL.type().equals(type)) {
+                retVal = new BigDecimal[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    retVal[i] = new BigDecimal(values[i]);
+                }
+            } else if (ParamType.SHORT.type().equals(type)) {
+                retVal = new Short[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    retVal[i] = Short.valueOf(values[i]);
+                }
+            } else {
+                // 未知类型，默认作为字符串处理
+                retVal = values;
+            }
+        } catch (NumberFormatException e) {
+            // 解析失败时返回原始字符串值
             retVal = values;
-        } else if (ParamType.INT.type().equals(type)) {
-            retVal = new Integer[values.length];
-            for (int i = 0; i < values.length; i++) {
-                retVal[i] = Integer.valueOf(values[i]);
-            }
-        } else if (ParamType.LONG.type().equals(type)) {
-            retVal = new Long[values.length];
-            for (int i = 0; i < values.length; i++) {
-                retVal[i] = Long.valueOf(values[i]);
-            }
-        } else if (ParamType.DATE.type().equals(type)) {
-            retVal = new Date[values.length];
-            for (int i = 0; i < values.length; i++) {
-                retVal[i] = DateUtils.parseDate(values[i]);
-            }
-        } else if (ParamType.DATETIME.type().equals(type)) {
-            retVal = new Date[values.length];
-            for (int i = 0; i < values.length; i++) {
-                retVal[i] = DateUtils.parseDateTime(values[i]);
-            }
-        } else if (ParamType.BIGDECIMAL.type().equals(type)) {
-            retVal = new BigDecimal[values.length];
-            for (int i = 0; i < values.length; i++) {
-                retVal[i] = new BigDecimal(values[i]);
-            }
-        } else if (ParamType.SHORT.type().equals(type)) {
-            retVal = new Short[values.length];
-            for (int i = 0; i < values.length; i++) {
-                retVal[i] = Short.valueOf(values[i]);
-            }
         }
         return retVal;
     }

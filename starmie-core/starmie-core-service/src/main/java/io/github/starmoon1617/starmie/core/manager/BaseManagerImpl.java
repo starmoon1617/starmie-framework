@@ -81,18 +81,19 @@ public abstract class BaseManagerImpl<E extends BaseEntity<ID, U>, ID extends Se
 
     @Override
     public void find(Pagination<E> pagination, BaseCriteria criteria) {
-        calculateLimitation(pagination, criteria);
+        BaseCriteria crta = calculateLimitation(pagination, criteria);
         int pageSize = pagination.getPageSize();
-        int count = getService().count(criteria);
+        // 判断是否查询总数,只有第一页时才查询总数
+        int count = 0;
+        if (pagination.getPageNo() == CriterionConstants.OFFSET) {
+            count = getService().count(crta);
+            pagination.setReturnTotal(true);
+        }
         pagination.setTotal(count);
         int mod = count % pageSize;
         pagination.setTotalPage((count - mod) / pageSize + (mod > 0 ? 1 : 0));
-        if (count > 0) {
-            if (pagination.getPageNo() >= pagination.getTotalPage()) {
-                pagination.setPageNo(CriterionConstants.OFFSET);
-                updateLimitation(criteria, pagination.getPageNo(), pageSize);
-            }
-            List<E> es = getService().find(criteria);
+        if (count > 0 || pagination.getPageNo() != CriterionConstants.OFFSET) {
+            List<E> es = getService().find(crta);
             if (!CommonUtils.isEmpty(es)) {
                 pagination.setElms(es);
                 pagination.setSize(es.size());
@@ -108,11 +109,11 @@ public abstract class BaseManagerImpl<E extends BaseEntity<ID, U>, ID extends Se
      * @param pagination
      * @param criteria
      */
-    protected void calculateLimitation(Pagination<E> pagination, BaseCriteria criteria) {
+    protected BaseCriteria calculateLimitation(Pagination<E> pagination, BaseCriteria criteria) {
         int pageSize = CriterionConstants.PAGESIZE;
         int currentPage = CriterionConstants.OFFSET;
         if (criteria == null) {
-            criteria = BaseCriteria.getInstance();
+            return BaseCriteria.getInstance();
         }
         if (pagination != null) {
             if (pagination.getPageSize() != 0) {
@@ -137,6 +138,7 @@ public abstract class BaseManagerImpl<E extends BaseEntity<ID, U>, ID extends Se
         pagination.setPageNo(currentPage);
         pagination.setPageSize(pageSize);
         updateLimitation(criteria, currentPage, pageSize);
+        return criteria;
     }
 
     /**

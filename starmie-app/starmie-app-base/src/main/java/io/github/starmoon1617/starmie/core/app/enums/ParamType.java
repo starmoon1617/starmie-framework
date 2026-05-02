@@ -27,11 +27,11 @@ public enum ParamType {
     /**
      * Short
      */
-    SHORT("H", "short"),
+    SHORT("H", "Short"),
     /**
      * Date
      */
-    DATE("D", "date"),
+    DATE("D", "Date"),
     /**
      * Datetime
      */

@@ -54,7 +54,7 @@ public class EntityUtils {
     /**
      * if ObjectMappers initialized
      */
-    private static Boolean omInited = Boolean.FALSE;
+    private static boolean omInited = false;
 
     static {
         initOm();
@@ -64,7 +64,7 @@ public class EntityUtils {
      * initialize ObjectMappers
      */
     private static synchronized void initOm() {
-        if (!omInited.booleanValue()) {
+        if (!omInited) {
 
             NOM.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             NOM.setDateFormat(new SimpleDateFormat(TimeConstants.DATE_TIME_FORMAT));
@@ -74,7 +74,7 @@ public class EntityUtils {
             NOTNOM.setDateFormat(new SimpleDateFormat(TimeConstants.DATE_TIME_FORMAT));
             NOTNOM.setDefaultPropertyInclusion(Include.NON_NULL);
             NOTNOM.registerModule((new SimpleModule()).addDeserializer(Date.class, new DateJsonDeserializer()));
-            omInited = Boolean.TRUE;
+            omInited = true;
         }
 
     }
@@ -163,7 +163,7 @@ public class EntityUtils {
      */
     public static String toNonNJson(Object object) {
         try {
-            return NOM.writeValueAsString(object);
+            return NOTNOM.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new EntityOperationException("Object to Json Exception!", e);
         }

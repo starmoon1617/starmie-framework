@@ -21,6 +21,30 @@ public class SessionUtils {
     private SessionUtils() {
 
     }
+    
+    /**
+     * Get RequestAttributes with null check
+     * 
+     * @return RequestAttributes or throw IllegalStateException if not available
+     */
+    private static RequestAttributes getRequestAttributesSafe() {
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        if (attrs == null) {
+            throw new IllegalStateException("No request context available");
+        }
+        return attrs;
+    }
+    
+    /**
+     * Validate key parameter
+     * 
+     * @param key
+     */
+    private static void validateKey(String key) {
+        if (key == null || key.isEmpty()) {
+            throw new IllegalArgumentException("Key cannot be null or empty");
+        }
+    }
 
     /**
      * Set Object to Session
@@ -30,6 +54,7 @@ public class SessionUtils {
      * @param object
      */
     public static void set(HttpSession session, String key, Object object) {
+        validateKey(key);
         session.setAttribute(key, object);
     }
 
@@ -40,7 +65,8 @@ public class SessionUtils {
      * @param object
      */
     public static void set(String key, Object object) {
-        RequestContextHolder.getRequestAttributes().setAttribute(key, object, RequestAttributes.SCOPE_SESSION);
+        validateKey(key);
+        getRequestAttributesSafe().setAttribute(key, object, RequestAttributes.SCOPE_SESSION);
     }
 
     /**
@@ -53,8 +79,9 @@ public class SessionUtils {
      * @return
      */
     public static <T> T get(HttpSession session, String key, Class<T> clazz) {
+        validateKey(key);
         Object obj = session.getAttribute(key);
-        return (obj != null ? clazz.cast(obj) : null);
+        return (obj != null && clazz.isInstance(obj)) ? clazz.cast(obj) : null;
     }
 
     /**
@@ -66,8 +93,9 @@ public class SessionUtils {
      * @return
      */
     public static <T> T get(String key, Class<T> clazz) {
-        Object obj = RequestContextHolder.getRequestAttributes().getAttribute(key, RequestAttributes.SCOPE_SESSION);
-        return (obj != null ? clazz.cast(obj) : null);
+        validateKey(key);
+        Object obj = getRequestAttributesSafe().getAttribute(key, RequestAttributes.SCOPE_SESSION);
+        return (obj != null && clazz.isInstance(obj)) ? clazz.cast(obj) : null;
     }
 
     /**
@@ -77,6 +105,7 @@ public class SessionUtils {
      * @param key
      */
     public static void clear(HttpSession session, String key) {
+        validateKey(key);
         session.removeAttribute(key);
     }
 
@@ -86,7 +115,8 @@ public class SessionUtils {
      * @param key
      */
     public static void clear(String key) {
-        RequestContextHolder.getRequestAttributes().removeAttribute(key, RequestAttributes.SCOPE_SESSION);
+        validateKey(key);
+        getRequestAttributesSafe().removeAttribute(key, RequestAttributes.SCOPE_SESSION);
     }
     
     /**
@@ -95,7 +125,8 @@ public class SessionUtils {
      * @param object
      */
     public static void setAttr(String name, Object object) {
-        RequestContextHolder.getRequestAttributes().setAttribute(name, object, RequestAttributes.SCOPE_REQUEST);
+        validateKey(name);
+        getRequestAttributesSafe().setAttribute(name, object, RequestAttributes.SCOPE_REQUEST);
     }
     
     /**
@@ -107,8 +138,9 @@ public class SessionUtils {
      * @return
      */
     public static <T> T getAttr(String name, Class<T> clazz) {
-        Object obj = RequestContextHolder.getRequestAttributes().getAttribute(name, RequestAttributes.SCOPE_REQUEST);
-        return (obj != null ? clazz.cast(obj) : null);
+        validateKey(name);
+        Object obj = getRequestAttributesSafe().getAttribute(name, RequestAttributes.SCOPE_REQUEST);
+        return (obj != null && clazz.isInstance(obj)) ? clazz.cast(obj) : null;
     }
     
     /**
@@ -121,7 +153,8 @@ public class SessionUtils {
      * @return
      */
     public static <T> T getAttr(ServletRequest request, String name, Class<T> clazz) {
+        validateKey(name);
         Object obj = request.getAttribute(name);
-        return (obj != null ? clazz.cast(obj) : null);
+        return (obj != null && clazz.isInstance(obj)) ? clazz.cast(obj) : null;
     }
 }

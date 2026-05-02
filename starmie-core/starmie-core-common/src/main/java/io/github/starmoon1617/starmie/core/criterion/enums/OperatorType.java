@@ -32,7 +32,7 @@ public enum OperatorType {
      */
     RLKM("LIKE", "RLKM"),
     /**
-     * like, 右边模糊匹配%, '%X'
+     * like, 左边模糊匹配%, '%X'
      */
     LLKM("LIKE", "LLKM"),
     /**
@@ -83,7 +83,7 @@ public enum OperatorType {
     /**
      * 操作
      */
-    private String opreator;
+    private String operator;
 
     /**
      * 名称
@@ -91,10 +91,10 @@ public enum OperatorType {
     private String type;
 
     /**
-     * @param opreator
+     * @param operator
      */
-    private OperatorType(String opreator, String type) {
-        this.opreator = opreator;
+    private OperatorType(String operator, String type) {
+        this.operator = operator;
         this.type = type;
     }
 
@@ -103,8 +103,8 @@ public enum OperatorType {
      * 
      * @return
      */
-    public String opreator() {
-        return opreator;
+    public String operator() {
+        return operator;
     }
 
     /**
