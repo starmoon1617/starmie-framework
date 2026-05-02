@@ -72,7 +72,6 @@ public class ExcelReader {
                     erh.reset();
                 }
             }
-            extractor.close();
             return datas;
         } catch (RuntimeException re) {
             throw re;

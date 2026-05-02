@@ -73,8 +73,10 @@ public class ExcelReadJsonHandler<T> extends ExcelReadHandler<T> {
         if (isHead) {
             return;
         }
-        // remove last comma (,)
-        rowRaw.deleteCharAt(rowRaw.length() - 1);
+        // remove last comma (,) - only if content was written after '{'
+        if (rowRaw.length() > 1) {
+            rowRaw.deleteCharAt(rowRaw.length() - 1);
+        }
         rowRaw.append("}");
         super.endRow(rowNum);
     }

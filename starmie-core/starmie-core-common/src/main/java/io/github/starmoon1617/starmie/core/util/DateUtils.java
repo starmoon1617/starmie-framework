@@ -65,12 +65,12 @@ public class DateUtils {
         }
         String tmpStr = dateStr.trim();
         try {
-            if (tmpStr.trim().length() == 19) {
+            if (tmpStr.length() == 19) {
                 return DateUtils.parseDateTime(tmpStr);
             } else if (tmpStr.length() == 10) {
                 return DateUtils.parseDate(tmpStr);
             } else {
-                return DateUtils.parseDateTimeMs(dateStr);
+                return DateUtils.parseDateTimeMs(tmpStr);
             }
         } catch (Exception e) {
             throw new DateOperationException("date str is not format of 'yyyy-MM-dd'/'yyyy-MM-dd HH:mm:ss'/'yyyy-MM-dd HH:mm:ss.SSS'!", e);

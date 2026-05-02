@@ -32,7 +32,7 @@ public class StringUtils {
      */
     public static List<String> split(String str) {
         if (!StringUtility.stringHasValue(str)) {
-            return null;
+            return new ArrayList<>();
         }
         List<String> list = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(str, Constants.COMMA);
@@ -72,7 +72,7 @@ public class StringUtils {
             return str;
         }
         if (str.length() == 1) {
-            return str.toUpperCase();
+            return str.toLowerCase();
         }
         return (new StringBuilder("")).append(Character.toLowerCase(str.charAt(0))).append(str.substring(1)).toString();
     }
